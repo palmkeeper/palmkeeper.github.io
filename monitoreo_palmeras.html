@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palm Keeper - Sistema de Monitoreo Agrícola</title>
+    <style>
+        :root {
+            --color-optimo: #2e7d32;
+            --color-inicial: #689f38;
+            --color-moderado: #f9a825;
+            --color-critico: #d32f2f;
+            --color-fondo: #f5f5f5;
+            --color-texto: #333;
+            --color-card: #ffffff;
+            --color-borde: #e0e0e0;
+            --color-primario: #2e7d32;
+        }
+
+        [data-theme="dark"] {
+            --color-fondo: #121212;
+            --color-texto: #e0e0e0;
+            --color-card: #1e1e1e;
+            --color-borde: #333;
+            --color-primario: #4caf50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--color-fondo);
+            color: var(--color-texto);
+            min-height: 100vh;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: var(--color-card);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Chalkboard SE', 'Comic Neue', 'Comic Sans MS', 'Marker Felt', sans-serif;
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: var(--color-card);
+            border-bottom: 2px solid var(--color-borde);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px 8px;
+            background: none;
+            border: none;
+            color: var(--color-texto);
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: var(--color-primario);
+            border-bottom-color: var(--color-primario);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 15px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            background: var(--color-card);
+            border: 1px solid var(--color-borde);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: var(--color-primario);
+            font-size: 1em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--color-texto);
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+
+        .required::after {
+            content: " *";
+            color: #d32f2f;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        input[type="search"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--color-borde);
+            border-radius: 8px;
+            font-size: 1em;
+            background: var(--color-card);
+            color: var(--color-texto);
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .three-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            flex: 1;
+            min-width: calc(33% - 6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 8px;
+            background: var(--color-card);
+            border: 2px solid var(--color-borde);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85em;
+        }
+
+        .radio-item:hover {
+            border-color: var(--color-primario);
+            background: #f1f8e9;
+        }
+
+        .radio-item.selected {
+            border-color: var(--color-primario);
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-weight: 600;
+        }
+
+        .scale-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .scale-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .scale-item input[type="radio"] {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            accent-color: var(--color-primario);
+        }
+
+        .scale-label {
+            font-size: 0.75em;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .scale-0 { color: var(--color-optimo); }
+        .scale-1 { color: var(--color-inicial); }
+        .scale-2 { color: var(--color-moderado); }
+        .scale-3 { color: var(--color-critico); }
+
+        .file-upload {
+            border: 2px dashed var(--color-borde);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background: var(--color-card);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--color-primario);
+            background: #f1f8e9;
+        }
+
+        .file-upload.has-file {
+            border-color: var(--color-primario);
+            background: #e8f5e9;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--color-primario) 0%, #1b5e20 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: var(--color-borde);
+            color: var(--color-texto);
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-accent {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid var(--color-primario);
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85em;
+            color: #1b5e20;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.85em;
+            color: #e65100;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid var(--color-primario);
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #1b5e20;
+            display: none;
+        }
+
+        .batch-section {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .batch-section h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .id-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .id-range input {
+            width: 80px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .template-card {
+            background: white;
+            border: 2px solid var(--color-borde);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .template-card:hover {
+            border-color: var(--color-primario);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .template-card.selected {
+            border-color: var(--color-primario);
+            background: #f1f8e9;
+        }
+
+        .template-card h4 {
+            color: var(--color-primario);
+            margin-bottom: 5px;
+        }
+
+        .template-card .meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .template-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .registro-item {
+            background: var(--color-card);
+            border: 1px solid var(--color-borde);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .registro-id {
+            font-weight: bold;
+            color: var(--color-primario);
+            font-size: 0.95em;
+        }
+
+        .heatmap-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .heatmap-zone {
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .heatmap-optimo { background: #c8e6c9; color: #1b5e20; }
+        .heatmap-bueno { background: #dcedc8; color: #33691e; }
+        .heatmap-regular { background: #fff9c4; color: #f57f17; }
+        .heatmap-malo { background: #ffccbc; color: #bf360c; }
+        .heatmap-critico { background: #ffcdd2; color: #b71c1c; }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primario), #4caf50);
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .two-columns, .three-columns {
+                grid-template-columns: 1fr;
+            }
+            
+            .id-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .id-range input {
+                width: 100%;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <div style="text-align: center; padding: 15px;">
+                <h1>Palm Keeper</h1>
+                <p>Sistema de Monitoreo Agrícola</p>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('individual')">➕ Individual</button>
+            <button class="nav-tab" onclick="showTab('masivo')">⚡ Masivo</button>
+            <button class="nav-tab" onclick="showTab('plantillas')">📋 Plantillas</button>
+            <button class="nav-tab" onclick="showTab('registros')">📊 Registros</button>
+            <button class="nav-tab" onclick="showTab('mapa')">🗺️ Mapa</button>
+        </div>
+
+        <!-- TAB: INDIVIDUAL -->
+        <div id="tab-individual" class="tab-content active">
+            <div style="padding: 15px;">
+                <div class="success-box" id="successMessage"></div>
+                
+                <form id="formIndividual" onsubmit="return guardarIndividual(event)">
+                    <div class="section">
+                        <div class="section-title">Identificación</div>
+                        <div class="three-columns">
+                            <div class="form-group">
+                                <label class="required">Cliente</label>
+                                <input type="text" id="ind_cliente" list="listaClientes" required onchange="cargarPlantillaCliente(this.value)">
+                                <datalist id="listaClientes"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Zona/Área</label>
+                                <input type="text" id="ind_zona" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Número</label>
+                                <input type="number" id="ind_numero" min="1" required onchange="generarIDIndividual()">
+                            </div>
+                        </div>
+                        <input type="hidden" id="ind_idPalmera">
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Datos del Tratamiento</div>
+                        <div class="two-columns">
+                            <div class="form-group">
+                                <label class="required">Fecha Tratamiento</label>
+                                <input type="date" id="ind_fechaTrat" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="required">Frecuencia</label>
+                                <select id="ind_frecuencia" required>
+                                    <option value="30">30 días</option>
+                                    <option value="60">60 días</option>
+                                    <option value="90">90 días</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Estado de Salud</div>
+                        <div class="form-group">
+                            <label>Vigor</label>
+                            <div class="scale-group">
+                                <div class="scale-item">
+                                    <input type="radio" name="ind_vigor" value="0" checked>
+                                    <label class="scale-label scale-0">0 ÓPTIMO</label>
+                                </div>
+                                <div class="scale-item">
+                                    <input type="radio" name="ind_vigor" value="1">
+                                    <label class="scale-label scale-1">1</label>
+                                </div>
+                                <div class="scale-item">
+                                    <input type="radio" name="ind_vigor" value="2">
+                                    <label class="scale-label scale-2">2</label>
+                                </div>
+                                <div class="scale-item">
+                                    <input type="radio" name="ind_vigor" value="3">
+                                    <label class="scale-label scale-3">3 CRÍTICO</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">Fotografías</div>
+                        <div class="two-columns">
+                            <div class="file-upload" id="ind_upload1" onclick="document.getElementById('ind_foto1').click()">
+                                <input type="file" id="ind_foto1" accept="image/*" capture="environment" onchange="procesarFoto(this, 'ind_upload1')">
+                                <div class="upload-icon">📷</div>
+                                <div>Vista General</div>
+                            </div>
+                            <div class="file-upload" id="ind_upload2" onclick="document.getElementById('ind_foto2').click()">
+                                <input type="file" id="ind_foto2" accept="image/*" capture="environment" onchange="procesarFoto(this, 'ind_upload2')">
+                                <div class="upload-icon">🔍</div>
+                                <div>Detalle</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">💾 Guardar y Continuar</button>
+                    <button type="button" class="btn-secondary" onclick="guardarYDuplicar()">💾 Guardar + Siguiente N°</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB: CARGA MASIVA -->
+        <div id="tab-masivo" class="tab-content">
+            <div style="padding: 15px;">
+                <div class="batch-section">
+                    <h3>⚡ Carga Rápida por Rango</h3>
+                    
+                    <div class="form-group">
+                        <label>Seleccionar Plantilla de Cliente</label>
+                        <select id="batch_plantilla" onchange="cargarDatosPlantilla(this.value)">
+                            <option value="">-- Seleccionar --</option>
+                        </select>
+                    </div>
+
+                    <div class="two-columns">
+                        <div class="form-group">
+                            <label class="required">Cliente</label>
+                            <input type="text" id="batch_cliente" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="required">Zona/Área</label>
+                            <input type="text" id="batch_zona" required>
+                        </div>
+                    </div>
+
+                    <div class="id-range">
+                        <span>Desde N°</span>
+                        <input type="number" id="batch_desde" min="1" value="1" onchange="actualizarPreviewBatch()">
+                        <span>hasta N°</span>
+                        <input type="number" id="batch_hasta" min="1" value="10" onchange="actualizarPreviewBatch()">
+                        <span>= <strong id="batch_cantidad">10</strong> palmeras</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Estado de salud común (opcional)</label>
+                        <select id="batch_estado" onchange="mostrarOpcionesEstado()">
+                            <option value="mismo">Mismo estado para todas</option>
+                            <option value="individual">Definir individualmente</option>
+                            <option value="alternado">Alternado (bueno/malo)</option>
+                        </select>
+                    </div>
+
+                    <div id="batch_estado_comun" class="form-group">
+                        <label>Vigor promedio</label>
+                        <div class="scale-group">
+                            <label class="radio-item" style="flex: 1;">
+                                <input type="radio" name="batch_vigor" value="0" checked> 0 Óptimo
+                            </label>
+                            <label class="radio-item" style="flex: 1;">
+                                <input type="radio" name="batch_vigor" value="1"> 1
+                            </label>
+                            <label class="radio-item" style="flex: 1;">
+                                <input type="radio" name="batch_vigor" value="2"> 2
+                            </label>
+                            <label class="radio-item" style="flex: 1;">
+                                <input type="radio" name="batch_vigor" value="3"> 3 Crítico
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="info-box" id="batch_preview">
+                        Se generarán IDs: CLIENTE-ZONA-001 al 010
+                    </div>
+
+                    <div class="progress-bar hidden" id="batch_progress_container">
+                        <div class="progress-fill" id="batch_progress" style="width: 0%">0%</div>
+                    </div>
+
+                    <button type="button" class="btn-primary btn-success" onclick="iniciarCargaMasiva()">
+                        🚀 Iniciar Carga Masiva
+                    </button>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📄 Importar desde Excel/CSV</div>
+                    <div class="file-upload" onclick="document.getElementById('csvFile').click()">
+                        <input type="file" id="csvFile" accept=".csv" hidden onchange="procesarCSV(this)">
+                        <div class="upload-icon">📊</div>
+                        <div>Seleccionar archivo CSV</div>
+                        <small style="color: #666;">Formato: ID, Cliente, Zona, Vigor, Clorosis, Necrosis...</small>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="descargarPlantillaCSV()" style="margin-top: 10px;">
+                        ⬇️ Descargar Plantilla CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: PLANTILLAS -->
+        <div id="tab-plantillas" class="tab-content">
+            <div style="padding: 15px;">
+                <button type="button" class="btn-primary" onclick="mostrarFormPlantilla()" style="margin-bottom: 15px;">
+                    ➕ Nueva Plantilla de Cliente
+                </button>
+                
+                <div id="formNuevaPlantilla" class="section hidden">
+                    <div class="section-title">Nueva Plantilla</div>
+                    <div class="form-group">
+                        <label>Nombre del Cliente</label>
+                        <input type="text" id="tpl_nombre" placeholder="Ej: Hotel Argentino">
+                    </div>
+                    <div class="form-group">
+                        <label>Zona/Área típica</label>
+                        <input type="text" id="tpl_zona" placeholder="Ej: Jardín Principal">
+                    </div>
+                    <div class="two-columns">
+                        <div class="form-group">
+                            <label>Frecuencia habitual</label>
+                            <select id="tpl_frecuencia">
+                                <option value="30">30 días</option>
+                                <option value="60">60 días</option>
+                                <option value="90">90 días</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantidad aprox. de palmeras</label>
+                            <input type="number" id="tpl_cantidad" placeholder="Ej: 40">
+                        </div>
+                    </div>
+                    <button type="button" class="btn-primary" onclick="guardarPlantilla()">Guardar Plantilla</button>
+                    <button type="button" class="btn-secondary" onclick="cancelarPlantilla()">Cancelar</button>
+                </div>
+
+                <div id="listaPlantillas"></div>
+            </div>
+        </div>
+
+        <!-- TAB: REGISTROS -->
+        <div id="tab-registros" class="tab-content">
+            <div style="padding: 15px;">
+                <input type="search" id="buscarRegistro" placeholder="🔍 Buscar..." class="form-group" oninput="filtrarRegistros()" style="margin-bottom: 15px;">
+                <div id="listaRegistros"></div>
+            </div>
+        </div>
+
+        <!-- TAB: MAPA -->
+        <div id="tab-mapa" class="tab-content">
+            <div style="padding: 15px;">
+                <div class="heatmap-container" id="heatmapContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4c4jScOr2tfd0zyWzgg7B9_-CYDm-kqDFSkRWWQ2Ahzu5aRCKbwHZLFl2fAoYdXDgPA/exec';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('ind_fechaTrat').valueAsDate = new Date();
+            cargarPlantillas();
+            actualizarListaClientes();
+            mostrarRegistros();
+            
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+            }
+        });
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tab === 'mapa') generarMapaCalor();
+            if (tab === 'registros') mostrarRegistros();
+            if (tab === 'plantillas') mostrarPlantillas();
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            
+            if (isDark) {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function generarIDIndividual() {
+            const cliente = document.getElementById('ind_cliente').value.trim().toUpperCase().replace(/\s+/g, '-');
+            const zona = document.getElementById('ind_zona').value.trim().toUpperCase().replace(/\s+/g, '-');
+            const num = String(document.getElementById('ind_numero').value).padStart(3, '0');
+            
+            if (cliente && zona && num) {
+                const id = `${cliente}-${zona}-${num}`;
+                document.getElementById('ind_idPalmera').value = id;
+            }
+        }
+
+        function cargarPlantillaCliente(nombreCliente) {
+            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            const tpl = plantillas.find(p => p.nombre.toLowerCase() === nombreCliente.toLowerCase());
+            
+            if (tpl) {
+                document.getElementById('ind_zona').value = tpl.zona;
+                document.getElementById('ind_frecuencia').value = tpl.frecuencia;
+                
+                const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
+                const delCliente = regs.filter(r => r.nombreCliente.toLowerCase() === nombreCliente.toLowerCase());
+                const maxNum = delCliente.reduce((max, r) => {
+                    const match = r.idPalmera.match(/-(\d+)$/);
+                    return match ? Math.max(max, parseInt(match[1])) : max;
+                }, 0);
+                
+                document.getElementById('ind_numero').value = maxNum + 1;
+                generarIDIndividual();
+            }
+        }
+
+        async function guardarIndividual(e) {
+            e.preventDefault();
+            await guardarPalmera(false);
+        }
+
+        async function guardarYDuplicar() {
+            await guardarPalmera(true);
+        }
+
+        async function guardarPalmera(duplicar) {
+            const datos = {
+                idPalmera: document.getElementById('ind_idPalmera').value,
+                nombreCliente: document.getElementById('ind_cliente').value,
+                ubicacionZona: document.getElementById('ind_zona').value,
+                fechaTratamiento: document.getElementById('ind_fechaTrat').value,
+                frecuenciaDosis: document.getElementById('ind_frecuencia').value,
+                vigor: document.querySelector('input[name="ind_vigor"]:checked').value,
+                timestamp: new Date().toISOString(),
+                fechaProximoTratamiento: calcularProximaFecha(document.getElementById('ind_fechaTrat').value, document.getElementById('ind_frecuencia').value)
+            };
+
+            let regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
+            regs.push(datos);
+            localStorage.setItem('registrosPalmeras', JSON.stringify(regs));
+
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('successMessage').textContent = `✓ Guardado: ${datos.idPalmera}`;
+            setTimeout(() => document.getElementById('successMessage').style.display = 'none', 2000);
+
+            if (duplicar) {
+                const num = parseInt(document.getElementById('ind_numero').value) + 1;
+                document.getElementById('ind_numero').value = num;
+                generarIDIndividual();
+                document.getElementById('ind_foto1').value = '';
+                document.getElementById('ind_foto2').value = '';
+                document.getElementById('ind_upload1').classList.remove('has-file');
+                document.getElementById('ind_upload2').classList.remove('has-file');
+                document.getElementById('ind_numero').focus();
+            } else {
+                document.getElementById('formIndividual').reset();
+                document.getElementById('ind_fechaTrat').valueAsDate = new Date();
+            }
+        }
+
+        function calcularProximaFecha(fecha, freq) {
+            const f = new Date(fecha);
+            f.setDate(f.getDate() + parseInt(freq));
+            return f.toISOString().split('T')[0];
+        }
+
+        function procesarFoto(input, containerId) {
+            const container = document.getElementById(containerId);
+            if (input.files?.[0]) {
+                container.classList.add('has-file');
+                container.querySelector('div:last-child').textContent = '✓ ' + input.files[0].name;
+            }
+        }
+
+        function actualizarPreviewBatch() {
+            const desde = parseInt(document.getElementById('batch_desde').value) || 1;
+            const hasta = parseInt(document.getElementById('batch_hasta').value) || 10;
+            const cantidad = Math.max(0, hasta - desde + 1);
+            
+            document.getElementById('batch_cantidad').textContent = cantidad;
+            
+            const cliente = document.getElementById('batch_cliente').value || 'CLIENTE';
+            const zona = document.getElementById('batch_zona').value || 'ZONA';
+            
+            const preview = `${cliente.toUpperCase().replace(/\s+/g, '-')}-${zona.toUpperCase().replace(/\s+/g, '-')}-${String(desde).padStart(3, '0')} al ${String(hasta).padStart(3, '0')}`;
+            document.getElementById('batch_preview').textContent = `Se generarán: ${preview} (${cantidad} palmeras)`;
+        }
+
+        async function iniciarCargaMasiva() {
+            const cliente = document.getElementById('batch_cliente').value;
+            const zona = document.getElementById('batch_zona').value;
+            const desde = parseInt(document.getElementById('batch_desde').value);
+            const hasta = parseInt(document.getElementById('batch_hasta').value);
+            
+            if (!cliente || !zona) {
+                alert('Complete cliente y zona');
+                return;
+            }
+
+            const cantidad = hasta - desde + 1;
+            if (!confirm(`¿Confirmar carga de ${cantidad} palmeras?`)) return;
+
+            const progressContainer = document.getElementById('batch_progress_container');
+            const progressBar = document.getElementById('batch_progress');
+            progressContainer.classList.remove('hidden');
+
+            const vigorBase = document.querySelector('input[name="batch_vigor"]:checked')?.value || '0';
+            let regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
+
+            for (let i = desde; i <= hasta; i++) {
+                const progreso = ((i - desde + 1) / cantidad) * 100;
+                progressBar.style.width = progreso + '%';
+                progressBar.textContent = Math.round(progreso) + '%';
+
+                let vigor = vigorBase;
+                if (document.getElementById('batch_estado').value === 'alternado') {
+                    vigor = (i % 2 === 0) ? '0' : '2';
+                }
+
+                const datos = {
+                    idPalmera: `${cliente.toUpperCase().replace(/\s+/g, '-')}-${zona.toUpperCase().replace(/\s+/g, '-')}-${String(i).padStart(3, '0')}`,
+                    nombreCliente: cliente,
+                    ubicacionZona: zona,
+                    fechaTratamiento: new Date().toISOString().split('T')[0],
+                    frecuenciaDosis: '30',
+                    vigor: vigor,
+                    timestamp: new Date().toISOString(),
+                    fechaProximoTratamiento: calcularProximaFecha(new Date().toISOString().split('T')[0], '30')
+                };
+
+                regs.push(datos);
+                
+                if (i % 5 === 0) await new Promise(r => setTimeout(r, 10));
+            }
+
+            localStorage.setItem('registrosPalmeras', JSON.stringify(regs));
+            
+            progressBar.textContent = '✓ Completado';
+            setTimeout(() => {
+                progressContainer.classList.add('hidden');
+                alert(`✓ ${cantidad} palmeras cargadas exitosamente`);
+                showTab('registros');
+                document.querySelector('.nav-tab:nth-child(4)').click();
+            }, 500);
+        }
+
+        function cargarPlantillas() {
+            let plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            
+            if (plantillas.length === 0) {
+                plantillas = [{
+                    id: Date.now(),
+                    nombre: 'Hotel Argentino',
+                    zona: 'Jardin-Principal',
+                    frecuencia: '30',
+                    cantidad: 40
+                }];
+                localStorage.setItem('plantillas', JSON.stringify(plantillas));
+            }
+        }
+
+        function mostrarPlantillas() {
+            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            const container = document.getElementById('listaPlantillas');
+            
+            container.innerHTML = plantillas.map(p => `
+                <div class="template-card" onclick="seleccionarPlantilla(${p.id})">
+                    <div class="template-actions" onclick="event.stopPropagation()">
+                        <button class="btn-icon" onclick="editarPlantilla(${p.id})" style="background: #2196f3;">✏️</button>
+                        <button class="btn-icon" onclick="eliminarPlantilla(${p.id})" style="background: #f44336;">🗑️</button>
+                    </div>
+                    <h4>${p.nombre}</h4>
+                    <div class="meta">
+                        Zona: ${p.zona} | Frecuencia: ${p.frecuencia} días | ~${p.cantidad} palmeras
+                    </div>
+                </div>
+            `).join('');
+
+            const select = document.getElementById('batch_plantilla');
+            select.innerHTML = '<option value="">-- Seleccionar --</option>' + 
+                plantillas.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+        }
+
+        function mostrarFormPlantilla() {
+            document.getElementById('formNuevaPlantilla').classList.remove('hidden');
+        }
+
+        function cancelarPlantilla() {
+            document.getElementById('formNuevaPlantilla').classList.add('hidden');
+        }
+
+        function guardarPlantilla() {
+            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            
+            const nueva = {
+                id: Date.now(),
+                nombre: document.getElementById('tpl_nombre').value,
+                zona: document.getElementById('tpl_zona').value,
+                frecuencia: document.getElementById('tpl_frecuencia').value,
+                cantidad: document.getElementById('tpl_cantidad').value
+            };
+
+            plantillas.push(nueva);
+            localStorage.setItem('plantillas', JSON.stringify(plantillas));
+            
+            cancelarPlantilla();
+            mostrarPlantillas();
+            actualizarListaClientes();
+        }
+
+        function cargarDatosPlantilla(id) {
+            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            const p = plantillas.find(pl => pl.id == id);
+            if (!p) return;
+
+            document.getElementById('batch_cliente').value = p.nombre;
+            document.getElementById('batch_zona').value = p.zona;
+            actualizarPreviewBatch();
+        }
+
+        function actualizarListaClientes() {
+            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
+            const datalist = document.getElementById('listaClientes');
+            datalist.innerHTML = plantillas.map(p => `<option value="${p.nombre}">`).join('');
+        }
+
+        function mostrarRegistros() {
+            const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
+            const container = document.getElementById('listaRegistros');
+            
+            if (regs.length === 0) {
+                container.innerHTML = '<div class="info-box">No hay registros</div>';
+                return;
+            }
+
+            const porCliente = {};
+            regs.forEach(r => {
+                if (!porCliente[r.nombreCliente]) porCliente[r.nombreCliente] = [];
+                porCliente[r.nombreCliente].push(r);
+            });
+
+            container.innerHTML = Object.keys(porCliente).map(cliente => {
+                const palmeras = porCliente[cliente];
+                const criticas = palmeras.filter(p => p.vigor === '3').length;
+                
+                return `
+                    <div class="section" style="margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="color: var(--color-primario); font-size: 1.1em;">${cliente}</strong>
+                                <div style="font-size: 0.85em; color: #666; margin-top: 4px;">
+                                    ${palmeras.length} palmeras registradas
+                                    ${criticas > 0 ? `| <span style="color: #d32f2f;">${criticas} críticas</span>` : ''}
+                                </div>
+                            </div>
+                            <button class="btn-secondary" style="width: auto; padding: 8px 16px;" onclick="verDetalleCliente('${cliente}')">
+                                Ver detalle
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filtrarRegistros() {
+            const term = document.getElementById('buscarRegistro').value.toLowerCase();
+        }
+
+        function generarMapaCalor() {
+            const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
+            const container = document.getElementById('heatmapContainer');
+            
+            if (regs.length === 0) {
+                container.innerHTML = '<div class="info-box">No hay datos</div>';
+                return;
+            }
+
+            const porZona = {};
+            regs.forEach(r => {
+                const key = `${r.nombreCliente} - ${r.ubicacionZona}`;
+                if (!porZona[key]) porZona[key] = [];
+                porZona[key].push(r);
+            });
+
+            container.innerHTML = Object.keys(porZona).map(zona => {
+                const palmeras = porZona[zona];
+                const promedio = palmeras.reduce((sum, p) => sum + parseInt(p.vigor || 0), 0) / palmeras.length;
+                
+                let clase = 'heatmap-optimo';
+                if (promedio > 2) clase = 'heatmap-critico';
+                else if (promedio > 1.5) clase = 'heatmap-malo';
+                else if (promedio > 1) clase = 'heatmap-regular';
+                else if (promedio > 0.5) clase = 'heatmap-bueno';
+
+                return `
+                    <div class="${clase}" style="padding: 15px; border-radius: 10px; text-align: center;">
+                        <div style="font-weight: bold; font-size: 0.9em;">${zona}</div>
+                        <div style="font-size: 1.5em; margin: 5px 0;">${palmeras.length}</div>
+                        <div style="font-size: 0.8em;">Prom: ${promedio.toFixed(1)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function descargarPlantillaCSV() {
+            const csv = 'ID_Palmera,Cliente,Zona,Fecha_Tratamiento,Frecuencia_Dias,Vigor,Clorosis,Necrosis\n' +
+                       'EJEMPLO-001,Hotel Argentino,Jardin-Principal,2024-02-07,30,0,0,0';
+            
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'plantilla_carga_masiva.csv';
+            link.click();
+        }
+
+        function procesarCSV(input) {
+            alert('Procesando CSV... (función en desarrollo)');
+        }
+    </script>
+</body>
+</html>
