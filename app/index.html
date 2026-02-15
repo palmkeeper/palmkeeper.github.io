@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Web — Protocolo / Registro</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --card:#101826; --muted:#7f8ea3; --text:#e8eef7;
+      --line:#1d2a3b; --accent:#66d9ff; --ok:#5ee38f; --warn:#ffd166; --bad:#ff5c7a;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 700px at 15% 10%, #122035 0%, transparent 60%),
+                  radial-gradient(900px 600px at 85% 0%, #1a2a44 0%, transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding:24px 20px 10px;
+      max-width:1100px; margin:0 auto;
+      display:flex; gap:16px; align-items:flex-end; justify-content:space-between; flex-wrap:wrap;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .brand h1{margin:0; font-size:22px; letter-spacing:.2px}
+    .brand p{margin:0; color:var(--muted); font-size:13px}
+    .toolbar{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    button, .btn{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #132338, #0f1928);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      font-size:13px;
+    }
+    button:hover{border-color:#2a3f59}
+    button:active{transform: translateY(1px)}
+    .btn-secondary{
+      background:transparent;
+      box-shadow:none;
+    }
+    .container{
+      max-width:1100px; margin:0 auto;
+      padding:10px 20px 40px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+    }
+    @media (max-width: 980px){
+      .container{grid-template-columns:1fr}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-header{
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .card-header h2{margin:0; font-size:14px; letter-spacing:.4px; text-transform:uppercase; color:#cfe0ff}
+    .card-header .small{color:var(--muted); font-size:12px}
+    .card-body{padding:16px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 640px){
+      .grid{grid-template-columns:1fr}
+    }
+    label{
+      display:block; font-size:12px; color:var(--muted); margin:0 0 6px;
+    }
+    input[type="text"], input[type="date"], select, textarea{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background:#0c1420;
+      color:var(--text);
+      border-radius:12px;
+      outline:none;
+      font-size:14px;
+    }
+    textarea{min-height:96px; resize:vertical}
+    input:focus, select:focus, textarea:focus{border-color:#335a85; box-shadow:0 0 0 3px rgba(102,217,255,.12)}
+    .seg{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#0c1420;
+      font-size:12px;
+      color:#d7e6ff;
+    }
+    .dot{width:10px; height:10px; border-radius:999px; background:var(--accent)}
+    .dot.ok{background:var(--ok)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+    .divider{height:1px; background:var(--line); margin:14px 0}
+    .help{color:var(--muted); font-size:12px; line-height:1.35}
+    .kpi{
+      display:grid; grid-template-columns: repeat(3,1fr);
+      gap:10px;
+    }
+    .kpi .box{
+      border:1px solid var(--line);
+      background:#0c1420;
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    .kpi .box b{display:block; font-size:14px}
+    .kpi .box span{color:var(--muted); font-size:12px}
+    .photos{
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    .drop{
+      border:1px dashed #2a3f59;
+      border-radius:14px;
+      padding:12px;
+      background: rgba(12,20,32,.6);
+      min-height:120px;
+      display:flex; flex-direction:column; gap:10px;
+      align-items:center; justify-content:center;
+      text-align:center;
+      color:var(--muted);
+    }
+    .thumb{
+      width:100%; height:120px; border-radius:12px; overflow:hidden;
+      border:1px solid var(--line);
+      background:#0a101a;
+      display:none;
+    }
+    .thumb img{width:100%; height:100%; object-fit:cover}
+    .req{
+      display:inline-block;
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      background: rgba(255,92,122,.12);
+      color: var(--bad);
+      border: 1px solid rgba(255,92,122,.35);
+      margin-left:6px;
+    }
+    .status{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      font-size:12px; color:var(--muted);
+    }
+    .status strong{color:var(--text)}
+    .toast{
+      position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+      background:#0c1420; border:1px solid var(--line);
+      border-radius:999px; padding:10px 14px;
+      box-shadow: var(--shadow);
+      display:none;
+      color:var(--text);
+      font-size:13px;
+    }
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    .list{
+      margin:0; padding:0; list-style:none;
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .item{
+      padding:12px; border:1px solid var(--line); border-radius:14px; background:#0c1420;
+      display:flex; flex-direction:column; gap:8px;
+    }
+    .item-head{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;
+    }
+    .tag{
+      font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid var(--line);
+      color:#d7e6ff; background:rgba(102,217,255,.08);
+    }
+    .muted{color:var(--muted)}
+    .danger{color:var(--bad)}
+    .ok{color:var(--ok)}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <h1>Registro Técnico — Monitoreo de Palmeras</h1>
+      <p>Formulario + guardado local (navegador) + exportación JSON. Adaptable a protocolos Palm Keeper®.</p>
+    </div>
+    <div class="toolbar">
+      <button id="btnNew" class="btn-secondary">Nuevo</button>
+      <button id="btnSave">Guardar</button>
+      <button id="btnExport">Exportar JSON</button>
+      <button id="btnPrint" class="btn-secondary">Imprimir</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- FORM -->
+    <section class="card">
+      <div class="card-header">
+        <h2>1) Datos de identificación</h2>
+        <div class="status">
+          <span>Estado:</span>
+          <strong id="saveState">No guardado</strong>
+          <span class="pill"><span class="dot" id="dotState"></span><span id="dotText">pendiente</span></span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="grid">
+          <div>
+            <label for="recordId">ID / Código <span class="req">obligatorio</span></label>
+            <input id="recordId" type="text" placeholder="Ej: HA-PCI-014" />
+          </div>
+
+          <div>
+            <label for="prototype">Prototipo <span class="req">obligatorio</span></label>
+            <select id="prototype">
+              <option value="">Seleccionar…</option>
+              <option>F1</option>
+              <option>F2</option>
+              <option>F3</option>
+              <option>RC</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="date">Fecha <span class="req">obligatorio</span></label>
+            <input id="date" type="date" />
+          </div>
+
+          <div>
+            <label for="tech">Técnico / Responsable</label>
+            <input id="tech" type="text" placeholder="Ej: Juan Ragazzone" />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card-header" style="padding:0 0 10px; border:0">
+          <h2>2) Salud foliar (0 a 3)</h2>
+          <span class="small">0 = normal / 3 = severo</span>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label for="vigor">Vigor</label>
+            <select id="vigor">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="chlorosis">Clorosis</label>
+            <select id="chlorosis">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="necrosis">Necrosis</label>
+            <select id="necrosis">
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="notes">Notas técnicas</label>
+            <textarea id="notes" placeholder="Signos, evolución, observaciones en corona, exudados, galerías, presencia de picudos, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="card-header" style="padding:0 0 10px; border:0">
+          <h2>3) Estado cápsula / cánula</h2>
+          <span class="small">Seleccionar lo que corresponda</span>
+        </div>
+
+        <div class="seg">
+          <label class="pill"><input type="checkbox" id="capVarnish" /> Barnizado</label>
+          <label class="pill"><input type="checkbox" id="capBypass" /> Bypass</label>
+          <label class="pill"><input type="checkbox" id="capUV" /> Indicador UV</label>
+        </div>
+
+        <p class="help" style="margin-top:10px">
+          Sugerencia: anotar si hay pérdida de sello, filtración, obstrucción, daño mecánico o evidencia de manipulación.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="card-header" style="padding:0 0 10px; border:0">
+          <h2>4) Fotos <span class="req">2 obligatorias</span></h2>
+          <span class="small">1) foto amplia + 2) foto de copa</span>
+        </div>
+
+        <div class="photos">
+          <div class="drop" id="drop1">
+            <div class="thumb" id="thumb1"><img id="img1" alt="Foto 1"/></div>
+            <div>
+              <div><b>Foto 1</b> (amplia)</div>
+              <div class="help">Arrastrá una imagen acá o seleccioná un archivo.</div>
+            </div>
+            <input type="file" id="file1" accept="image/*" />
+          </div>
+
+          <div class="drop" id="drop2">
+            <div class="thumb" id="thumb2"><img id="img2" alt="Foto 2"/></div>
+            <div>
+              <div><b>Foto 2</b> (copa)</div>
+              <div class="help">Arrastrá una imagen acá o seleccioná un archivo.</div>
+            </div>
+            <input type="file" id="file2" accept="image/*" />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="kpi">
+          <div class="box">
+            <b id="kpiRisk">—</b>
+            <span>Riesgo estimado (regla simple)</span>
+          </div>
+          <div class="box">
+            <b id="kpiFoliar">—</b>
+            <span>Score foliar (0–9)</span>
+          </div>
+          <div class="box">
+            <b id="kpiPhotos">0/2</b>
+            <span>Fotos cargadas</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p class="help">
+          <span class="mono">Guardado local</span>: se almacena en tu navegador (localStorage) con clave por ID.
+          Para enviar a terceros, usá <b>Exportar JSON</b>.
+        </p>
+      </div>
+    </section>
+
+    <!-- LIST / HISTORY -->
+    <aside class="card">
+      <div class="card-header">
+        <h2>Registros guardados</h2>
+        <span class="small">En este dispositivo</span>
+      </div>
+      <div class="card-body">
+        <div class="grid" style="grid-template-columns: 1fr;">
+          <div>
+            <label for="search">Buscar por ID</label>
+            <input id="search" type="text" placeholder="Ej: HA-" />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <ul class="list" id="savedList"></ul>
+
+        <div class="divider"></div>
+        <p class="help">
+          Tip: si necesitás que esto guarde también en un archivo o en Google Drive/Sheets, te armo la versión con backend o export automático.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (id) => document.getElementById(id);
+    const toast = (msg) => {
+      const t = $("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=> t.style.display="none", 2200);
+    };
+    const nowISODate = () => {
+      const d = new Date();
+      const off = d.getTimezoneOffset();
+      const local = new Date(d.getTime() - off*60*1000);
+      return local.toISOString().slice(0,10);
+    };
+    const keyFor = (id) => `palm_record_${id}`;
+
+    // ---------- State ----------
+    let photo1Data = null;
+    let photo2Data = null;
+    let dirty = false;
+
+    // ---------- UI elements ----------
+    const el = {
+      recordId: $("recordId"),
+      prototype: $("prototype"),
+      date: $("date"),
+      tech: $("tech"),
+      vigor: $("vigor"),
+      chlorosis: $("chlorosis"),
+      necrosis: $("necrosis"),
+      notes: $("notes"),
+      capVarnish: $("capVarnish"),
+      capBypass: $("capBypass"),
+      capUV: $("capUV"),
+      file1: $("file1"),
+      file2: $("file2"),
+      img1: $("img1"),
+      img2: $("img2"),
+      thumb1: $("thumb1"),
+      thumb2: $("thumb2"),
+      drop1: $("drop1"),
+      drop2: $("drop2"),
+      kpiRisk: $("kpiRisk"),
+      kpiFoliar: $("kpiFoliar"),
+      kpiPhotos: $("kpiPhotos"),
+      savedList: $("savedList"),
+      search: $("search"),
+      saveState: $("saveState"),
+      dotState: $("dotState"),
+      dotText: $("dotText"),
+      btnSave: $("btnSave"),
+      btnNew: $("btnNew"),
+      btnExport: $("btnExport"),
+      btnPrint: $("btnPrint"),
+    };
+
+    // ---------- Derived / KPI ----------
+    const computeFoliarScore = () => {
+      const v = parseInt(el.vigor.value,10);
+      const c = parseInt(el.chlorosis.value,10);
+      const n = parseInt(el.necrosis.value,10);
+      return v + c + n;
+    };
+
+    const computeRiskLabel = () => {
+      // Regla simple y transparente:
+      // score 0-2 = Bajo, 3-5 = Medio, 6-9 = Alto
+      const score = computeFoliarScore();
+      if(score <= 2) return {label:"Bajo", cls:"ok"};
+      if(score <= 5) return {label:"Medio", cls:"warn"};
+      return {label:"Alto", cls:"bad"};
+    };
+
+    const updateKpis = () => {
+      const score = computeFoliarScore();
+      const risk = computeRiskLabel();
+
+      el.kpiFoliar.textContent = `${score}/9`;
+      el.kpiRisk.textContent = risk.label;
+
+      const photos = (photo1Data?1:0) + (photo2Data?1:0);
+      el.kpiPhotos.textContent = `${photos}/2`;
+
+      // Update pill dot color
+      el.dotState.className = "dot " + (dirty ? "warn" : "ok");
+      el.dotText.textContent = dirty ? "cambios sin guardar" : "ok";
+      el.saveState.textContent = dirty ? "Pendiente" : "Guardado / limpio";
+    };
+
+    const markDirty = () => { dirty = true; updateKpis(); };
+
+    // ---------- Photo handling ----------
+    const fileToDataURL = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("No se pudo leer el archivo"));
+      reader.readAsDataURL(file);
+    });
+
+    const setThumb = (n, dataURL) => {
+      if(n === 1){
+        photo1Data = dataURL;
+        el.img1.src = dataURL;
+        el.thumb1.style.display = "block";
+      } else {
+        photo2Data = dataURL;
+        el.img2.src = dataURL;
+        el.thumb2.style.display = "block";
+      }
+      markDirty();
+    };
+
+    const bindDrop = (dropEl, fileEl, n) => {
+      const handleFiles = async (files) => {
+        const f = files && files[0];
+        if(!f) return;
+        if(!f.type.startsWith("image/")){
+          toast("Solo imágenes.");
+          return;
+        }
+        const data = await fileToDataURL(f);
+        setThumb(n, data);
+      };
+
+      fileEl.addEventListener("change", (e)=> handleFiles(e.target.files));
+
+      ["dragenter","dragover"].forEach(evt=>{
+        dropEl.addEventListener(evt, (e)=>{
+          e.preventDefault(); e.stopPropagation();
+          dropEl.style.borderColor = "#66d9ff";
+        });
+      });
+
+      ["dragleave","drop"].forEach(evt=>{
+        dropEl.addEventListener(evt, (e)=>{
+          e.preventDefault(); e.stopPropagation();
+          dropEl.style.borderColor = "#2a3f59";
+        });
+      });
+
+      dropEl.addEventListener("drop", (e)=>{
+        handleFiles(e.dataTransfer.files);
+      });
+    };
+
+    bindDrop(el.drop1, el.file1, 1);
+    bindDrop(el.drop2, el.file2, 2);
+
+    // ---------- Save/Load ----------
+    const buildRecord = () => ({
+      id: el.recordId.value.trim(),
+      prototype: el.prototype.value,
+      date: el.date.value,
+      tech: el.tech.value.trim(),
+      foliar: {
+        vigor: parseInt(el.vigor.value,10),
+        chlorosis: parseInt(el.chlorosis.value,10),
+        necrosis: parseInt(el.necrosis.value,10),
+        score: computeFoliarScore(),
+      },
+      capsule: {
+        varnish: el.capVarnish.checked,
+        bypass: el.capBypass.checked,
+        uv: el.capUV.checked,
+      },
+      notes: el.notes.value.trim(),
+      photos: {
+        wide: photo1Data,
+        crown: photo2Data
+      },
+      meta: {
+        savedAt: new Date().toISOString(),
+        appVersion: "1.0.0"
+      }
+    });
+
+    const validate = () => {
+      const id = el.recordId.value.trim();
+      if(!id) return "Falta ID.";
+      if(!el.prototype.value) return "Falta Prototipo.";
+      if(!el.date.value) return "Falta Fecha.";
+      if(!photo1Data || !photo2Data) return "Faltan las 2 fotos obligatorias.";
+      return null;
+    };
+
+    const save = () => {
+      const err = validate();
+      if(err){ toast(err); return; }
+      const rec = buildRecord();
+      localStorage.setItem(keyFor(rec.id), JSON.stringify(rec));
+      localStorage.setItem("palm_last_id", rec.id);
+      dirty = false;
+      updateKpis();
+      refreshList();
+      toast("Guardado.");
+    };
+
+    const load = (id) => {
+      const raw = localStorage.getItem(keyFor(id));
+      if(!raw){ toast("No encontrado."); return; }
+      const rec = JSON.parse(raw);
+
+      el.recordId.value = rec.id || "";
+      el.prototype.value = rec.prototype || "";
+      el.date.value = rec.date || "";
+      el.tech.value = rec.tech || "";
+
+      el.vigor.value = String(rec.foliar?.vigor ?? 0);
+      el.chlorosis.value = String(rec.foliar?.chlorosis ?? 0);
+      el.necrosis.value = String(rec.foliar?.necrosis ?? 0);
+
+      el.capVarnish.checked = !!rec.capsule?.varnish;
+      el.capBypass.checked = !!rec.capsule?.bypass;
+      el.capUV.checked = !!rec.capsule?.uv;
+
+      el.notes.value = rec.notes || "";
+
+      // Photos
+      photo1Data = rec.photos?.wide || null;
+      photo2Data = rec.photos?.crown || null;
+
+      if(photo1Data){ el.img1.src = photo1Data; el.thumb1.style.display="block"; }
+      else { el.thumb1.style.display="none"; }
+
+      if(photo2Data){ el.img2.src = photo2Data; el.thumb2.style.display="block"; }
+      else { el.thumb2.style.display="none"; }
+
+      dirty = false;
+      updateKpis();
+      toast("Cargado.");
+    };
+
+    const newRecord = () => {
+      el.recordId.value = "";
+      el.prototype.value = "";
+      el.date.value = nowISODate();
+      el.tech.value = "";
+      el.vigor.value = "0";
+      el.chlorosis.value = "0";
+      el.necrosis.value = "0";
+      el.notes.value = "";
+      el.capVarnish.checked = false;
+      el.capBypass.checked = false;
+      el.capUV.checked = false;
+
+      photo1Data = null;
+      photo2Data = null;
+      el.thumb1.style.display="none";
+      el.thumb2.style.display="none";
+
+      dirty = false;
+      updateKpis();
+      toast("Nuevo registro.");
+    };
+
+    // ---------- List ----------
+    const getAllKeys = () => Object.keys(localStorage).filter(k => k.startsWith("palm_record_"));
+    const refreshList = () => {
+      const q = (el.search.value || "").toLowerCase().trim();
+      const keys = getAllKeys();
+      const items = keys.map(k => {
+        const rec = JSON.parse(localStorage.getItem(k));
+        return rec;
+      }).sort((a,b)=> (b?.meta?.savedAt||"").localeCompare(a?.meta?.savedAt||""));
+
+      const filtered = q ? items.filter(r => (r.id||"").toLowerCase().includes(q)) : items;
+
+      el.savedList.innerHTML = "";
+      if(filtered.length === 0){
+        const li = document.createElement("li");
+        li.className = "muted";
+        li.textContent = "No hay registros guardados.";
+        el.savedList.appendChild(li);
+        return;
+      }
+
+      filtered.slice(0, 30).forEach(rec=>{
+        const li = document.createElement("li");
+        li.className = "item";
+
+        const head = document.createElement("div");
+        head.className = "item-head";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<b>${rec.id || "—"}</b><div class="muted">${rec.date || ""} · ${rec.prototype || ""}</div>`;
+
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        const score = rec.foliar?.score ?? 0;
+        tag.textContent = `Score ${score}/9`;
+
+        head.appendChild(left);
+        head.appendChild(tag);
+
+        const notes = document.createElement("div");
+        notes.className = "muted";
+        notes.textContent = (rec.notes || "").slice(0, 110) + ((rec.notes||"").length > 110 ? "…" : "");
+
+        const actions = document.createElement("div");
+        actions.className = "seg";
+        const btnOpen = document.createElement("button");
+        btnOpen.textContent = "Abrir";
+        btnOpen.addEventListener("click", ()=> load(rec.id));
+
+        const btnDel = document.createElement("button");
+        btnDel.textContent = "Borrar";
+        btnDel.className = "btn-secondary";
+        btnDel.addEventListener("click", ()=>{
+          if(confirm(`Borrar ${rec.id}?`)){
+            localStorage.removeItem(keyFor(rec.id));
+            refreshList();
+            toast("Borrado.");
+          }
+        });
+
+        actions.appendChild(btnOpen);
+        actions.appendChild(btnDel);
+
+        li.appendChild(head);
+        li.appendChild(notes);
+        li.appendChild(actions);
+        el.savedList.appendChild(li);
+      });
+    };
+
+    // ---------- Export / Print ----------
+    const exportJSON = () => {
+      const err = validate();
+      if(err){ toast(err); return; }
+      const rec = buildRecord();
+      const blob = new Blob([JSON.stringify(rec, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${rec.id || "registro"}_${rec.date || ""}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast("JSON exportado.");
+    };
+
+    // ---------- Events ----------
+    [
+      el.recordId, el.prototype, el.date, el.tech,
+      el.vigor, el.chlorosis, el.necrosis, el.notes,
+      el.capVarnish, el.capBypass, el.capUV
+    ].forEach(inp=>{
+      inp.addEventListener("input", ()=> { markDirty(); });
+      inp.addEventListener("change", ()=> { markDirty(); });
+    });
+
+    el.btnSave.addEventListener("click", save);
+    el.btnNew.addEventListener("click", newRecord);
+    el.btnExport.addEventListener("click", exportJSON);
+    el.btnPrint.addEventListener("click", ()=> window.print());
+    el.search.addEventListener("input", refreshList);
+
+    window.addEventListener("beforeunload", (e)=>{
+      if(!dirty) return;
+      e.preventDefault();
+      e.returnValue = "";
+    });
+
+    // ---------- Init ----------
+    (function init(){
+      el.date.value = nowISODate();
+      el.dotState.className = "dot warn";
+      el.dotText.textContent = "pendiente";
+      el.saveState.textContent = "No guardado";
+      refreshList();
+
+      const lastId = localStorage.getItem("palm_last_id");
+      if(lastId){
+        // opcional: autoload
+        // load(lastId);
+      }
+      updateKpis();
+    })();
+  </script>
+</body>
+</html>
