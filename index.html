@@ -3,26 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Palm Keeper - Sistema de Monitoreo Agrícola</title>
+    <title>Palm Keeper® | Protección Profesional de Palmeras</title>
+    <meta name="description" content="Especialistas en endoterapia vegetal, monitoreo sanitario y manejo integrado de plagas. Protección técnica de palmeras contra el picudo rojo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --color-optimo: #2e7d32;
-            --color-inicial: #689f38;
-            --color-moderado: #f9a825;
-            --color-critico: #d32f2f;
-            --color-fondo: #f5f5f5;
-            --color-texto: #333;
-            --color-card: #ffffff;
-            --color-borde: #e0e0e0;
-            --color-primario: #2e7d32;
-        }
+        /* ============================================
+           PALM KEEPER® - SISTEMA DE DISEÑO
+           Profesional | Técnico | Sobrio
+           ============================================ */
 
-        [data-theme="dark"] {
-            --color-fondo: #121212;
-            --color-texto: #e0e0e0;
-            --color-card: #1e1e1e;
-            --color-borde: #333;
-            --color-primario: #4caf50;
+        :root {
+            /* Paleta de colores institucional */
+            --pk-black: #0a0a0a;
+            --pk-dark: #141414;
+            --pk-charcoal: #1f1f1f;
+            --pk-green-dark: #1a2f1a;
+            --pk-green: #2d4a2d;
+            --pk-green-light: #4a6b4a;
+            --pk-gray-dark: #2a2a2a;
+            --pk-gray: #666666;
+            --pk-gray-light: #a0a0a0;
+            --pk-white: #f5f5f5;
+            --pk-pure-white: #ffffff;
+            
+            /* Espaciado técnico */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 6rem;
+            
+            /* Tipografía */
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            /* Transiciones */
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -31,1129 +48,1483 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--color-fondo);
-            color: var(--color-texto);
-            min-height: 100vh;
-            padding: 10px;
-            transition: all 0.3s ease;
+            font-family: var(--font-main);
+            background-color: var(--pk-black);
+            color: var(--pk-white);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        /* ============================================
+           UTILIDADES
+           ============================================ */
+        
         .container {
-            max-width: 100%;
-            margin: 0 auto;
-            background: var(--color-card);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1a472a 0%, #2d5a3d 100%);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header h1 {
-            font-family: 'Chalkboard SE', 'Comic Neue', 'Comic Sans MS', 'Marker Felt', sans-serif;
-            font-size: 2.2em;
-            font-weight: bold;
-            margin: 0;
-            letter-spacing: 1px;
-        }
-
-        .header p {
-            font-size: 0.9em;
-            opacity: 0.9;
-            margin-top: 8px;
-            letter-spacing: 1px;
-        }
-
-        .theme-toggle {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.3s;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .nav-tabs {
-            display: flex;
-            background: var(--color-card);
-            border-bottom: 2px solid var(--color-borde);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .nav-tab {
-            flex: 1;
-            min-width: 80px;
-            padding: 12px 8px;
-            background: none;
-            border: none;
-            color: var(--color-texto);
-            font-size: 0.85em;
-            font-weight: 600;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .nav-tab.active {
-            color: var(--color-primario);
-            border-bottom-color: var(--color-primario);
-        }
-
-        .tab-content {
-            display: none;
-            padding: 15px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .section {
-            margin-bottom: 20px;
-            background: var(--color-card);
-            border: 1px solid var(--color-borde);
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        .section-title {
-            color: var(--color-primario);
-            font-size: 1em;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e8f5e9;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            color: var(--color-texto);
-            margin-bottom: 6px;
-            font-size: 0.9em;
-        }
-
-        .required::after {
-            content: " *";
-            color: #d32f2f;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="number"],
-        input[type="search"],
-        select,
-        textarea {
             width: 100%;
-            padding: 10px 12px;
-            border: 2px solid var(--color-borde);
-            border-radius: 8px;
-            font-size: 1em;
-            background: var(--color-card);
-            color: var(--color-texto);
-            transition: all 0.3s;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
         }
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: var(--color-primario);
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        .section-padding {
+            padding: var(--space-xl) 0;
         }
 
-        .two-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .text-center {
+            text-align: center;
         }
 
-        .three-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
+        .text-gradient {
+            background: linear-gradient(135deg, var(--pk-white) 0%, var(--pk-green-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .radio-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+        /* ============================================
+           TIPOGRAFÍA
+           ============================================ */
 
-        .radio-item {
-            flex: 1;
-            min-width: calc(33% - 6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 10px 8px;
-            background: var(--color-card);
-            border: 2px solid var(--color-borde);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85em;
-        }
-
-        .radio-item:hover {
-            border-color: var(--color-primario);
-            background: #f1f8e9;
-        }
-
-        .radio-item.selected {
-            border-color: var(--color-primario);
-            background: #e8f5e9;
-            color: #1b5e20;
+        h1, h2, h3, h4 {
             font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
         }
 
-        .scale-group {
-            display: flex;
-            gap: 8px;
-        }
-
-        .scale-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .scale-item input[type="radio"] {
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            accent-color: var(--color-primario);
-        }
-
-        .scale-label {
-            font-size: 0.75em;
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 700;
-            text-align: center;
         }
 
-        .scale-0 { color: var(--color-optimo); }
-        .scale-1 { color: var(--color-inicial); }
-        .scale-2 { color: var(--color-moderado); }
-        .scale-3 { color: var(--color-critico); }
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin-bottom: var(--space-md);
+        }
 
-        .file-upload {
-            border: 2px dashed var(--color-borde);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            background: var(--color-card);
-            transition: all 0.3s;
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: var(--space-sm);
+            color: var(--pk-white);
+        }
+
+        p {
+            color: var(--pk-gray-light);
+            font-size: 1.05rem;
+            max-width: 65ch;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--pk-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-xs);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           BOTONES
+           ============================================ */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 1rem 2rem;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
             cursor: pointer;
-        }
-
-        .file-upload:hover {
-            border-color: var(--color-primario);
-            background: #f1f8e9;
-        }
-
-        .file-upload.has-file {
-            border-color: var(--color-primario);
-            background: #e8f5e9;
-        }
-
-        .file-upload input[type="file"] {
-            display: none;
-        }
-
-        .upload-icon {
-            font-size: 2em;
-            margin-bottom: 8px;
+            transition: var(--transition-smooth);
+            border-radius: 2px;
+            letter-spacing: 0.02em;
         }
 
         .btn-primary {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--color-primario) 0%, #1b5e20 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            background-color: var(--pk-green);
+            color: var(--pk-white);
+            border: 1px solid var(--pk-green-light);
         }
 
         .btn-primary:hover {
+            background-color: var(--pk-green-light);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+            box-shadow: 0 10px 30px rgba(45, 74, 45, 0.3);
         }
 
-        .btn-secondary {
-            width: 100%;
-            padding: 12px;
-            background: var(--color-borde);
-            color: var(--color-texto);
-            border: none;
-            border-radius: 10px;
-            font-size: 0.95em;
+        .btn-outline {
+            background-color: transparent;
+            color: var(--pk-white);
+            border: 1px solid var(--pk-gray);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--pk-white);
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: var(--pk-black);
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
         }
 
-        .btn-accent {
-            background: #ff9800;
-            color: white;
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            color: var(--pk-white);
         }
 
-        .btn-success {
-            background: #4caf50;
-            color: white;
+        /* ============================================
+           NAVEGACIÓN
+           ============================================ */
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--pk-charcoal);
+            transition: var(--transition-smooth);
         }
 
-        .info-box {
-            background: #e8f5e9;
-            border-left: 4px solid var(--color-primario);
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.85em;
-            color: #1b5e20;
+        .navbar.scrolled {
+            background-color: rgba(10, 10, 10, 0.98);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .warning-box {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.85em;
-            color: #e65100;
-        }
-
-        .success-box {
-            background: #e8f5e9;
-            border-left: 4px solid var(--color-primario);
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.9em;
-            color: #1b5e20;
-            display: none;
-        }
-
-        .batch-section {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            border: 2px solid #2196f3;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .batch-section h3 {
-            color: #1565c0;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .id-range {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-
-        .id-range input {
-            width: 80px;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .template-card {
-            background: white;
-            border: 2px solid var(--color-borde);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .template-card:hover {
-            border-color: var(--color-primario);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .template-card.selected {
-            border-color: var(--color-primario);
-            background: #f1f8e9;
-        }
-
-        .template-card h4 {
-            color: var(--color-primario);
-            margin-bottom: 5px;
-        }
-
-        .template-card .meta {
-            font-size: 0.85em;
-            color: #666;
-        }
-
-        .template-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 5px;
-        }
-
-        .btn-icon {
-            width: 32px;
-            height: 32px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .registro-item {
-            background: var(--color-card);
-            border: 1px solid var(--color-borde);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
+        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
+            height: 80px;
+            padding: 0 var(--space-md);
         }
 
-        .registro-id {
-            font-weight: bold;
-            color: var(--color-primario);
-            font-size: 0.95em;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--pk-white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
         }
 
-        .heatmap-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
+        .logo span {
+            color: var(--pk-green-light);
         }
 
-        .heatmap-zone {
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
+        .nav-links {
+            display: none;
+            list-style: none;
+            gap: var(--space-lg);
         }
 
-        .heatmap-optimo { background: #c8e6c9; color: #1b5e20; }
-        .heatmap-bueno { background: #dcedc8; color: #33691e; }
-        .heatmap-regular { background: #fff9c4; color: #f57f17; }
-        .heatmap-malo { background: #ffccbc; color: #bf360c; }
-        .heatmap-critico { background: #ffcdd2; color: #b71c1c; }
+        .nav-links a {
+            color: var(--pk-gray-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
 
-        .progress-bar {
+        .nav-links a:hover {
+            color: var(--pk-white);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--pk-green-light);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover::after {
             width: 100%;
-            height: 20px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
         }
 
-        .progress-fill {
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--space-xs);
+            z-index: 1001;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--pk-white);
+            transition: var(--transition-smooth);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 80px);
+            background-color: var(--pk-black);
+            padding: var(--space-lg) var(--space-md);
+            transform: translateX(100%);
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+
+        .mobile-nav a {
+            color: var(--pk-white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--pk-charcoal);
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--pk-black) 0%, var(--pk-dark) 50%, var(--pk-green-dark) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, var(--color-primario), #4caf50);
-            transition: width 0.3s;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(45, 74, 45, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(45, 74, 45, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding-top: 80px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 0.5rem 1rem;
+            background-color: rgba(45, 74, 45, 0.2);
+            border: 1px solid var(--pk-green);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--pk-green-light);
+            margin-bottom: var(--space-md);
+            font-weight: 500;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: var(--pk-green-light);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            margin-bottom: var(--space-md);
+            max-width: 900px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--pk-gray-light);
+            margin-bottom: var(--space-lg);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            align-items: flex-start;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--pk-charcoal);
+        }
+
+        .stat-item h4 {
+            font-size: 1.5rem;
+            color: var(--pk-green-light);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item p {
+            font-size: 0.9rem;
+            color: var(--pk-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================
+           SECCIONES GENERALES
+           ============================================ */
+
+        .section-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .section-header h2 {
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-header p {
+            color: var(--pk-gray-light);
+            font-size: 1.1rem;
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+
+        .about {
+            background-color: var(--pk-dark);
+        }
+
+        .about-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .about-content h3 {
+            color: var(--pk-white);
+            margin-bottom: var(--space-md);
+            font-size: 1.8rem;
+        }
+
+        .about-content p {
+            margin-bottom: var(--space-md);
+        }
+
+        .difference-box {
+            background-color: var(--pk-charcoal);
+            border-left: 3px solid var(--pk-green);
+            padding: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .difference-box h4 {
+            color: var(--pk-green-light);
+            margin-bottom: var(--space-sm);
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .difference-list {
+            list-style: none;
+        }
+
+        .difference-list li {
+            padding: var(--space-xs) 0;
+            color: var(--pk-gray-light);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .difference-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--pk-green-light);
+            font-weight: 700;
+        }
+
+        /* ============================================
+           SERVICIOS SECTION
+           ============================================ */
+
+        .services {
+            background-color: var(--pk-black);
+        }
+
+        .services-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .service-card {
+            background-color: var(--pk-charcoal);
+            border: 1px solid var(--pk-gray-dark);
+            padding: var(--space-lg);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pk-green), var(--pk-green-light));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition-smooth);
+        }
+
+        .service-card:hover {
+            border-color: var(--pk-green);
+            transform: translateY(-5px);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--pk-green-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 0.8em;
+            margin-bottom: var(--space-md);
+            font-size: 1.5rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: var(--space-sm);
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--pk-gray-light);
+        }
+
+        /* ============================================
+           PICUDO ROJO SECTION
+           ============================================ */
+
+        .picudo {
+            background-color: var(--pk-dark);
+            position: relative;
+        }
+
+        .picudo-alert {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            gap: var(--space-md);
+            align-items: flex-start;
+        }
+
+        .alert-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .alert-content h3 {
+            color: #ef4444;
+            margin-bottom: var(--space-xs);
+        }
+
+        .alert-content p {
+            color: var(--pk-gray-light);
+            font-size: 0.95rem;
+        }
+
+        .picudo-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .picudo-info h3 {
+            margin-bottom: var(--space-md);
+            color: var(--pk-white);
+        }
+
+        .threat-list {
+            list-style: none;
+            margin-top: var(--space-md);
+        }
+
+        .threat-list li {
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid var(--pk-charcoal);
+            color: var(--pk-gray-light);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .threat-list li::before {
+            content: '⚠';
+            color: #ef4444;
             font-weight: bold;
         }
 
-        @media (max-width: 600px) {
-            .two-columns, .three-columns {
-                grid-template-columns: 1fr;
-            }
-            
-            .id-range {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .id-range input {
-                width: 100%;
-            }
+        /* ============================================
+           METODOLOGÍA SECTION
+           ============================================ */
 
-            .header h1 {
-                font-size: 1.8em;
+        .method {
+            background-color: var(--pk-black);
+        }
+
+        .method-steps {
+            display: grid;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        .step {
+            display: flex;
+            gap: var(--space-md);
+            padding: var(--space-lg);
+            background-color: var(--pk-charcoal);
+            border: 1px solid var(--pk-gray-dark);
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--pk-green);
+            opacity: 0.3;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: var(--space-xs);
+            color: var(--pk-white);
+        }
+
+        .step-content p {
+            color: var(--pk-gray-light);
+            font-size: 0.95rem;
+        }
+
+        .technical-note {
+            margin-top: var(--space-lg);
+            padding: var(--space-md);
+            background-color: var(--pk-charcoal);
+            border-left: 3px solid var(--pk-gray);
+            font-size: 0.95rem;
+            color: var(--pk-gray-light);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           CONTACTO SECTION
+           ============================================ */
+
+        .contact {
+            background-color: var(--pk-dark);
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .contact-info h3 {
+            margin-bottom: var(--space-md);
+        }
+
+        .contact-method {
+            margin-bottom: var(--space-lg);
+        }
+
+        .contact-method h4 {
+            color: var(--pk-green-light);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .whatsapp-box {
+            background-color: #25D366;
+            color: var(--pk-black);
+            padding: var(--space-md);
+            border-radius: 4px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            transition: var(--transition-smooth);
+            margin-top: var(--space-sm);
+        }
+
+        .whatsapp-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-box strong {
+            font-size: 1.2rem;
+            display: block;
+        }
+
+        .whatsapp-box span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            color: var(--pk-gray-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--pk-charcoal);
+            border: 1px solid var(--pk-gray-dark);
+            color: var(--pk-white);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            transition: var(--transition-smooth);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--pk-green);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .disclaimer {
+            margin-top: var(--space-md);
+            padding: var(--space-md);
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--pk-gray-dark);
+            font-size: 0.9rem;
+            color: var(--pk-gray-light);
+            line-height: 1.6;
+        }
+
+        .disclaimer strong {
+            color: var(--pk-gray-light);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        /* ============================================
+           BOTÓN FLOTANTE WHATSAPP
+           ============================================ */
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 999;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-float svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                width: 56px;
+                height: 56px;
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+            
+            .whatsapp-float svg {
+                width: 28px;
+                height: 28px;
             }
         }
 
-        .hidden { display: none !important; }
+        /* ============================================
+           FOOTER
+           ============================================ */
+
+        .footer {
+            background-color: var(--pk-black);
+            border-top: 1px solid var(--pk-charcoal);
+            padding: var(--space-lg) 0;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--pk-white);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-logo span {
+            color: var(--pk-green-light);
+        }
+
+        .footer p {
+            color: var(--pk-gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--pk-gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-links a:hover {
+            color: var(--pk-white);
+        }
+
+        .footer-contact {
+            margin-top: var(--space-sm);
+            font-size: 0.85rem;
+        }
+
+        .footer-contact a {
+            color: var(--pk-gray-light);
+            text-decoration: none;
+            margin: 0 var(--space-xs);
+            transition: var(--transition-smooth);
+        }
+
+        .footer-contact a:hover {
+            color: var(--pk-green-light);
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .hero-cta {
+                flex-direction: row;
+            }
+
+            .hero-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+                align-items: center;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .service-card.featured {
+                grid-column: span 2;
+            }
+
+            .picudo-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .method-steps {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .service-card.featured {
+                grid-column: span 1;
+            }
+        }
+
+        /* ============================================
+           ANIMACIONES
+           ============================================ */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--pk-black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--pk-charcoal);
+            border: 2px solid var(--pk-black);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--pk-green);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-            <div style="text-align: center; padding: 15px;">
-                <h1>Palm Keeper</h1>
-                <p>Sistema de Monitoreo Agrícola</p>
-            </div>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Palm Keeper<span>®</span></a>
+            
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#picudo">Picudo Rojo</a></li>
+                <li><a href="#metodo">Metodología</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
 
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('individual')">➕ Individual</button>
-            <button class="nav-tab" onclick="showTab('masivo')">⚡ Masivo</button>
-            <button class="nav-tab" onclick="showTab('plantillas')">📋 Plantillas</button>
-            <button class="nav-tab" onclick="showTab('registros')">📊 Registros</button>
-            <button class="nav-tab" onclick="showTab('mapa')">🗺️ Mapa</button>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#picudo">Picudo Rojo</a>
+            <a href="#metodo">Metodología</a>
+            <a href="#contacto">Contacto</a>
         </div>
+    </nav>
 
-        <!-- TAB: INDIVIDUAL -->
-        <div id="tab-individual" class="tab-content active">
-            <div style="padding: 15px;">
-                <div class="success-box" id="successMessage"></div>
-                
-                <form id="formIndividual" onsubmit="return guardarIndividual(event)">
-                    <div class="section">
-                        <div class="section-title">Identificación</div>
-                        <div class="three-columns">
-                            <div class="form-group">
-                                <label class="required">Cliente</label>
-                                <input type="text" id="ind_cliente" list="listaClientes" required onchange="cargarPlantillaCliente(this.value)">
-                                <datalist id="listaClientes"></datalist>
-                            </div>
-                            <div class="form-group">
-                                <label class="required">Zona/Área</label>
-                                <input type="text" id="ind_zona" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="required">Número</label>
-                                <input type="number" id="ind_numero" min="1" required onchange="generarIDIndividual()">
-                            </div>
-                        </div>
-                        <input type="hidden" id="ind_idPalmera">
-                    </div>
-
-                    <div class="section">
-                        <div class="section-title">Datos del Tratamiento</div>
-                        <div class="two-columns">
-                            <div class="form-group">
-                                <label class="required">Fecha Tratamiento</label>
-                                <input type="date" id="ind_fechaTrat" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="required">Frecuencia</label>
-                                <select id="ind_frecuencia" required>
-                                    <option value="30">30 días</option>
-                                    <option value="60">60 días</option>
-                                    <option value="90">90 días</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <div class="section-title">Estado de Salud</div>
-                        <div class="form-group">
-                            <label>Vigor</label>
-                            <div class="scale-group">
-                                <div class="scale-item">
-                                    <input type="radio" name="ind_vigor" value="0" checked>
-                                    <label class="scale-label scale-0">0 ÓPTIMO</label>
-                                </div>
-                                <div class="scale-item">
-                                    <input type="radio" name="ind_vigor" value="1">
-                                    <label class="scale-label scale-1">1</label>
-                                </div>
-                                <div class="scale-item">
-                                    <input type="radio" name="ind_vigor" value="2">
-                                    <label class="scale-label scale-2">2</label>
-                                </div>
-                                <div class="scale-item">
-                                    <input type="radio" name="ind_vigor" value="3">
-                                    <label class="scale-label scale-3">3 CRÍTICO</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <div class="section-title">Fotografías</div>
-                        <div class="two-columns">
-                            <div class="file-upload" id="ind_upload1" onclick="document.getElementById('ind_foto1').click()">
-                                <input type="file" id="ind_foto1" accept="image/*" capture="environment" onchange="procesarFoto(this, 'ind_upload1')">
-                                <div class="upload-icon">📷</div>
-                                <div>Vista General</div>
-                            </div>
-                            <div class="file-upload" id="ind_upload2" onclick="document.getElementById('ind_foto2').click()">
-                                <input type="file" id="ind_foto2" accept="image/*" capture="environment" onchange="procesarFoto(this, 'ind_upload2')">
-                                <div class="upload-icon">🔍</div>
-                                <div>Detalle</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-primary">💾 Guardar y Continuar</button>
-                    <button type="button" class="btn-secondary" onclick="guardarYDuplicar()">💾 Guardar + Siguiente N°</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- TAB: CARGA MASIVA -->
-        <div id="tab-masivo" class="tab-content">
-            <div style="padding: 15px;">
-                <div class="batch-section">
-                    <h3>⚡ Carga Rápida por Rango</h3>
-                    
-                    <div class="form-group">
-                        <label>Seleccionar Plantilla de Cliente</label>
-                        <select id="batch_plantilla" onchange="cargarDatosPlantilla(this.value)">
-                            <option value="">-- Seleccionar --</option>
-                        </select>
-                    </div>
-
-                    <div class="two-columns">
-                        <div class="form-group">
-                            <label class="required">Cliente</label>
-                            <input type="text" id="batch_cliente" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="required">Zona/Área</label>
-                            <input type="text" id="batch_zona" required>
-                        </div>
-                    </div>
-
-                    <div class="id-range">
-                        <span>Desde N°</span>
-                        <input type="number" id="batch_desde" min="1" value="1" onchange="actualizarPreviewBatch()">
-                        <span>hasta N°</span>
-                        <input type="number" id="batch_hasta" min="1" value="10" onchange="actualizarPreviewBatch()">
-                        <span>= <strong id="batch_cantidad">10</strong> palmeras</span>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Estado de salud común (opcional)</label>
-                        <select id="batch_estado" onchange="mostrarOpcionesEstado()">
-                            <option value="mismo">Mismo estado para todas</option>
-                            <option value="individual">Definir individualmente</option>
-                            <option value="alternado">Alternado (bueno/malo)</option>
-                        </select>
-                    </div>
-
-                    <div id="batch_estado_comun" class="form-group">
-                        <label>Vigor promedio</label>
-                        <div class="scale-group">
-                            <label class="radio-item" style="flex: 1;">
-                                <input type="radio" name="batch_vigor" value="0" checked> 0 Óptimo
-                            </label>
-                            <label class="radio-item" style="flex: 1;">
-                                <input type="radio" name="batch_vigor" value="1"> 1
-                            </label>
-                            <label class="radio-item" style="flex: 1;">
-                                <input type="radio" name="batch_vigor" value="2"> 2
-                            </label>
-                            <label class="radio-item" style="flex: 1;">
-                                <input type="radio" name="batch_vigor" value="3"> 3 Crítico
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="info-box" id="batch_preview">
-                        Se generarán IDs: CLIENTE-ZONA-001 al 010
-                    </div>
-
-                    <div class="progress-bar hidden" id="batch_progress_container">
-                        <div class="progress-fill" id="batch_progress" style="width: 0%">0%</div>
-                    </div>
-
-                    <button type="button" class="btn-primary btn-success" onclick="iniciarCargaMasiva()">
-                        🚀 Iniciar Carga Masiva
-                    </button>
+    <!-- HERO / HOME -->
+    <section class="hero" id="inicio">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">Especialistas en endoterapia vegetal</div>
+                <h1>Protección profesional de palmeras</h1>
+                <p class="hero-subtitle">
+                    Endoterapia vegetal especializada, monitoreo sanitario continuo y manejo integrado de plagas. 
+                    Tecnología de precisión contra el picudo rojo.
+                </p>
+                <div class="hero-cta">
+                    <a href="#contacto" class="btn btn-primary">Consulta técnica</a>
+                    <a href="https://wa.me/59891919338?text=Hola%20Palm%20Keeper%C2%AE.%20Quiero%20una%20consulta%20t%C3%A9cnica.%0AUbicaci%C3%B3n%3A%0AEspecie%20(si%20la%20sab%C3%A9s)%3A%0AS%C3%ADntomas%3A%0A%C2%BFTen%C3%A9s%20fotos%3F%20S%C3%AD%2FNo" class="btn btn-whatsapp" target="_blank">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                        </svg>
+                        WhatsApp Directo
+                    </a>
                 </div>
 
-                <div class="section">
-                    <div class="section-title">📄 Importar desde Excel/CSV</div>
-                    <div class="file-upload" onclick="document.getElementById('csvFile').click()">
-                        <input type="file" id="csvFile" accept=".csv" hidden onchange="procesarCSV(this)">
-                        <div class="upload-icon">📊</div>
-                        <div>Seleccionar archivo CSV</div>
-                        <small style="color: #666;">Formato: ID, Cliente, Zona, Vigor, Clorosis, Necrosis...</small>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h4>Endo</h4>
+                        <p>Endoterapia vegetal</p>
                     </div>
-                    <button type="button" class="btn-secondary" onclick="descargarPlantillaCSV()" style="margin-top: 10px;">
-                        ⬇️ Descargar Plantilla CSV
-                    </button>
+                    <div class="stat-item">
+                        <h4>Proto</h4>
+                        <p>Protocolos técnicos</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Seg</h4>
+                        <p>Seguimiento sanitario</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>Doc</h4>
+                        <p>Registro e informes</p>
+                    </div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- TAB: PLANTILLAS -->
-        <div id="tab-plantillas" class="tab-content">
-            <div style="padding: 15px;">
-                <button type="button" class="btn-primary" onclick="mostrarFormPlantilla()" style="margin-bottom: 15px;">
-                    ➕ Nueva Plantilla de Cliente
-                </button>
-                
-                <div id="formNuevaPlantilla" class="section hidden">
-                    <div class="section-title">Nueva Plantilla</div>
-                    <div class="form-group">
-                        <label>Nombre del Cliente</label>
-                        <input type="text" id="tpl_nombre" placeholder="Ej: Hotel Argentino">
+    <!-- QUÉ ES PALM KEEPER -->
+    <section class="about section-padding" id="nosotros">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-subtitle">Quiénes somos</p>
+                <h2>Excelencia técnica en <span class="text-gradient">fitoprotección</span></h2>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-content fade-in">
+                    <h3>Enfoque técnico, no comercial</h3>
+                    <p>
+                        Palm Keeper® nace de la necesidad de profesionalizar el cuidado de palmeras en entornos urbanos y privados. 
+                        No somos una empresa de fumigación genérica: nos especializamos exclusivamente en palmeras, 
+                        combinando conocimiento botánico, tecnología de endoterapia y protocolos de sanidad vegetal.
+                    </p>
+                    <p>
+                        Nuestro trabajo se basa en el diagnóstico preciso, la intervención mínimamente invasiva y el 
+                        seguimiento continuo. Entendemos la fisiología de las palmeras y las dinámicas de plagas específicas 
+                        que las afectan.
+                    </p>
+                </div>
+
+                <div class="difference-box fade-in">
+                    <h4>Diferencia clave</h4>
+                    <ul class="difference-list">
+                        <li>Tratamientos sistémicos vs. aplicaciones superficiales</li>
+                        <li>Monitoreo preventivo vs. intervención de emergencia</li>
+                        <li>Informes técnicos documentados vs. promesas verbales</li>
+                        <li>Biología del picudo rojo vs. "fumigación de insectos"</li>
+                        <li>Preservación del ecosistema vs. eradicación masiva</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="services section-padding" id="servicios">
+        <div class="container">
+            <div class="section-header text-center fade-in">
+                <p class="section-subtitle">Servicios especializados</p>
+                <h2>Protocolos técnicos de <span class="text-gradient">protección vegetal</span></h2>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🌿</div>
+                    <h3>Endoterapia Vegetal</h3>
+                    <p>
+                        Inyección directa de fitofármacos en el xilema. Método sistémico que distribuye el tratamiento 
+                        por toda la copa sin afectar el entorno. Mínima invasión, máxima eficacia.
+                    </p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">🛡️</div>
+                    <h3>Tratamientos Preventivos</h3>
+                    <p>
+                        Protocolos de inmunización antes de la presencia de plagas. Especialmente crítico en zonas 
+                        de riesgo o con historial de picudo rojo en la zona.
+                    </p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚔️</div>
+                    <h3>Tratamientos de Ataque</h3>
+                    <p>
+                        Intervención urgente en casos de infestación activa. Evaluación de viabilidad del ejemplar 
+                        y aplicación de protocolos de contención.
+                    </p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">💧</div>
+                    <h3>Duchas Foliares</h3>
+                    <p>
+                        Aplicación de nutrientes, bioestimulantes y tratamientos complementarios directamente sobre 
+                        el follaje. Mejora la resistencia y vigor general.
+                    </p>
+                </div>
+
+                <div class="service-card featured fade-in">
+                    <div class="service-icon">📊</div>
+                    <h3>Monitoreo y Seguimiento Sanitario</h3>
+                    <p>
+                        Inspecciones periódicas programadas con registro fotográfico y evaluación de parámetros 
+                        vitales. Detección temprana de estrés, plagas o patologías. Incluye alertas preventivas 
+                        y recomendaciones específicas por estación.
+                    </p>
+                </div>
+
+                <div class="service-card fade-in">
+                    <div class="service-icon">📋</div>
+                    <h3>Informes Técnicos</h3>
+                    <p>
+                        Documentación completa del estado sanitario, tratamientos aplicados, evolución y 
+                        pronóstico. Esencial para comunidades, aseguradoras y gestión patrimonial.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PICUDO ROJO -->
+    <section class="picudo section-padding" id="picudo">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-subtitle">Plagas prioritarias</p>
+                <h2>Rhynchophorus ferrugineus: <span class="text-gradient">Amenaza crítica</span></h2>
+            </div>
+
+            <div class="picudo-alert fade-in">
+                <div class="alert-icon">🚨</div>
+                <div class="alert-content">
+                    <h3>Alerta Sanitaria</h3>
+                    <p>El picudo rojo es la plaga más destructiva de palmeras en el mundo. En España, está declarada plaga cuarentenaria de importancia. La detección temprana es la única estrategia viable.</p>
+                </div>
+            </div>
+
+            <div class="picudo-grid">
+                <div class="picudo-info fade-in">
+                    <h3>¿Qué es el picudo rojo?</h3>
+                    <p>
+                        Coleóptero de la familia Curculionidae, originario del sudeste asiático. El adulto presenta coloración rojiza característica y tamaño considerable. Su ciclo biológico es acelerado en climas cálidos, permitiendo desarrollos poblacionales explosivos durante la temporada estival.
+                    </p>
+                    <p style="margin-top: var(--space-md);">
+                        La hembra deposita huevos en heridas o zonas blandas del estípite. Las larvas 
+                        excavan galerías en el interior, destruyendo el tejido vascular y provocando la muerte 
+                        del ejemplar.
+                    </p>
+                </div>
+
+                <div class="picudo-info fade-in">
+                    <h3>¿Por qué es tan peligroso?</h3>
+                    <ul class="threat-list">
+                        <li>Sintomatología externa tardía: cuando se ven signos, el daño interno es severo</li>
+                        <li>Alta capacidad de dispersión (vuelo activo, transporte en material infestado)</li>
+                        <li>Amplio espectro de hospedantes: Phoenix, Washingtonia, Butia, Syagrus...</li>
+                        <li>Resistencia a tratamientos superficiales por ubicación endógena</li>
+                        <li>Alta mortalidad sin intervención temprana</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="margin-top: var(--space-lg); padding: var(--space-lg); background-color: var(--pk-charcoal); border-left: 3px solid var(--pk-green);" class="fade-in">
+                <h3 style="color: var(--pk-green-light); margin-bottom: var(--space-sm);">Importancia del monitoreo temprano</h3>
+                <p>
+                    El éxito terapéutico está directamente correlacionado con el estadio de infestación. En fases 
+                    iniciales, la probabilidad de recuperación es alta. En estadios avanzados 
+                    (destrucción del meristemo apical o gran parte del estípite comprometido), el pronóstico es reservado.
+                </p>
+                <p style="margin-top: var(--space-sm);">
+                    Nuestros protocolos priorizan la detección temprana mediante monitoreo visual técnico, registro fotográfico, historial de intervención y criterios de decisión claros para repetir, reforzar o escalar el tratamiento.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- METODOLOGÍA -->
+    <section class="method section-padding" id="metodo">
+        <div class="container">
+            <div class="section-header text-center fade-in">
+                <p class="section-subtitle">Proceso técnico</p>
+                <h2>Nuestro <span class="text-gradient">método de trabajo</span></h2>
+            </div>
+
+            <div class="method-steps">
+                <div class="step fade-in">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Diagnóstico</h3>
+                        <p>
+                            Evaluación exhaustiva del estado fitosanitario. Análisis de especie, edad, ubicación, 
+                            síntomas visibles y factores de riesgo ambiental. Determinación de estadio de infestación 
+                            si existe sospecha de picudo.
+                        </p>
                     </div>
-                    <div class="form-group">
-                        <label>Zona/Área típica</label>
-                        <input type="text" id="tpl_zona" placeholder="Ej: Jardín Principal">
+                </div>
+
+                <div class="step fade-in">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Intervención</h3>
+                        <p>
+                            Diseño de protocolo específico: selección de principios activos, dosificación calibrada, 
+                            técnica de aplicación (endoterapia, foliar, etc.) y planificación de intervenciones 
+                            sucesivas.
+                        </p>
                     </div>
-                    <div class="two-columns">
+                </div>
+
+                <div class="step fade-in">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Seguimiento</h3>
+                        <p>
+                            Control periódico de evolución. Ajuste de protocolos según respuesta. Documentación 
+                            continua y alertas preventivas. Evaluación de éxito terapéutico con criterios objetivos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="technical-note fade-in">
+                Los tratamientos y protocolos se definen según diagnóstico y estadio del caso. En infestaciones avanzadas el pronóstico puede ser reservado. Palm Keeper® se compromete a aplicar criterios técnicos y seguimiento documentado, sin prometer recuperaciones absolutas.
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section class="contact section-padding" id="contacto">
+        <div class="container">
+            <div class="section-header fade-in">
+                <p class="section-subtitle">Contacto profesional</p>
+                <h2>Inicie su <span class="text-gradient">consulta técnica</span></h2>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-info fade-in">
+                    <h3>Respondemos y coordinamos a la brevedad</h3>
+                    <p style="margin-bottom: var(--space-lg);">
+                        Evaluamos cada caso individualmente. Para diagnósticos de urgencia o sospecha de picudo rojo, 
+                        contacte directamente por WhatsApp con fotografías del ejemplar.
+                    </p>
+
+                    <div class="contact-method">
+                        <h4>WhatsApp Directo</h4>
+                        <a href="https://wa.me/59891919338?text=Hola%20Palm%20Keeper%C2%AE.%20Quiero%20una%20consulta%20t%C3%A9cnica.%0AUbicaci%C3%B3n%3A%0AEspecie%20(si%20la%20sab%C3%A9s)%3A%0AS%C3%ADntomas%3A%0A%C2%BFTen%C3%A9s%20fotos%3F%20S%C3%AD%2FNo" class="whatsapp-box" target="_blank">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                            <div>
+                                <strong>+598 091 919 338</strong>
+                                <span>Coordinación y respuesta</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="contact-method">
+                        <h4>Email Técnico</h4>
+                        <p style="color: var(--pk-white); font-size: 1.1rem;">palmkeeperuy@gmail.com</p>
+                        <p style="font-size: 0.9rem; margin-top: var(--space-xs);">Para informes y documentación</p>
+                    </div>
+                </div>
+
+                <div class="contact-form-container fade-in">
+                    <form id="contactForm" class="contact-form">
                         <div class="form-group">
-                            <label>Frecuencia habitual</label>
-                            <select id="tpl_frecuencia">
-                                <option value="30">30 días</option>
-                                <option value="60">60 días</option>
-                                <option value="90">90 días</option>
+                            <label for="name">Nombre completo *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo electrónico *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Teléfono</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Tipo de consulta *</label>
+                            <select id="service" name="service" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="diagnostico">Diagnóstico de urgencia</option>
+                                <option value="preventivo">Plan preventivo</option>
+                                <option value="tratamiento">Tratamiento activo</option>
+                                <option value="monitoreo">Monitoreo periódico</option>
+                                <option value="informe">Solicitud de informe</option>
+                                <option value="otro">Otra consulta</option>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label>Cantidad aprox. de palmeras</label>
-                            <input type="number" id="tpl_cantidad" placeholder="Ej: 40">
+                            <label for="message">Descripción del caso *</label>
+                            <textarea id="message" name="message" placeholder="Describa la especie de palmera, ubicación, síntomas observados y antecedentes..." required></textarea>
                         </div>
-                    </div>
-                    <button type="button" class="btn-primary" onclick="guardarPlantilla()">Guardar Plantilla</button>
-                    <button type="button" class="btn-secondary" onclick="cancelarPlantilla()">Cancelar</button>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            Enviar consulta técnica
+                        </button>
+
+                        <div class="disclaimer">
+                            Los tratamientos y protocolos se definen según diagnóstico y estadio del caso. En infestaciones avanzadas el pronóstico puede ser reservado. Palm Keeper® se compromete a aplicar criterios técnicos y seguimiento documentado, sin prometer recuperaciones absolutas.
+                        </div>
+                    </form>
                 </div>
-
-                <div id="listaPlantillas"></div>
             </div>
         </div>
+    </section>
 
-        <!-- TAB: REGISTROS -->
-        <div id="tab-registros" class="tab-content">
-            <div style="padding: 15px;">
-                <input type="search" id="buscarRegistro" placeholder="🔍 Buscar..." class="form-group" oninput="filtrarRegistros()" style="margin-bottom: 15px;">
-                <div id="listaRegistros"></div>
+    <!-- BOTÓN FLOTANTE WHATSAPP -->
+    <a href="https://wa.me/59891919338?text=Hola%20Palm%20Keeper%C2%AE.%20Quiero%20una%20consulta%20t%C3%A9cnica.%0AUbicaci%C3%B3n%3A%0AEspecie%20(si%20la%20sab%C3%A9s)%3A%0AS%C3%ADntomas%3A%0A%C2%BFTen%C3%A9s%20fotos%3F%20S%C3%AD%2FNo" class="whatsapp-float" target="_blank" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+    </a>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-logo">Palm Keeper<span>®</span></div>
+            <p>Protección profesional de palmeras mediante endoterapia vegetal</p>
+            <ul class="footer-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#picudo">Picudo Rojo</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <p style="margin-top: var(--space-md); font-size: 0.8rem;">
+                © 2026 Palm Keeper®. Todos los derechos reservados.
+            </p>
+            <div class="footer-contact">
+                <a href="mailto:palmkeeperuy@gmail.com">palmkeeperuy@gmail.com</a> | 
+                <a href="https://wa.me/59891919338?text=Hola%20Palm%20Keeper%C2%AE.%20Quiero%20una%20consulta%20t%C3%A9cnica.%0AUbicaci%C3%B3n%3A%0AEspecie%20(si%20la%20sab%C3%A9s)%3A%0AS%C3%ADntomas%3A%0A%C2%BFTen%C3%A9s%20fotos%3F%20S%C3%AD%2FNo" target="_blank">WhatsApp</a>
             </div>
         </div>
+    </footer>
 
-        <!-- TAB: MAPA -->
-        <div id="tab-mapa" class="tab-content">
-            <div style="padding: 15px;">
-                <div class="heatmap-container" id="heatmapContainer"></div>
-            </div>
-        </div>
-    </div>
-
+    <!-- JAVASCRIPT -->
     <script>
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4c4jScOr2tfd0zyWzgg7B9_-CYDm-kqDFSkRWWQ2Ahzu5aRCKbwHZLFl2fAoYdXDgPA/exec';
-        
+        // ============================================
+        // PALM KEEPER® - FUNCIONALIDADES
+        // ============================================
+
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('ind_fechaTrat').valueAsDate = new Date();
-            cargarPlantillas();
-            actualizarListaClientes();
-            mostrarRegistros();
             
-            if (localStorage.getItem('theme') === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-            }
-        });
+            // 1. NAVEGACIÓN MÓVIL
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileLinks = mobileNav.querySelectorAll('a');
 
-        function showTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            event.target.classList.add('active');
-            
-            if (tab === 'mapa') generarMapaCalor();
-            if (tab === 'registros') mostrarRegistros();
-            if (tab === 'plantillas') mostrarPlantillas();
-        }
+            mobileMenuBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                mobileNav.classList.toggle('active');
+                document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+            });
 
-        function toggleTheme() {
-            const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            
-            if (isDark) {
-                body.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        }
+            // Cerrar menú al hacer click en enlace
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuBtn.classList.remove('active');
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
 
-        function generarIDIndividual() {
-            const cliente = document.getElementById('ind_cliente').value.trim().toUpperCase().replace(/\s+/g, '-');
-            const zona = document.getElementById('ind_zona').value.trim().toUpperCase().replace(/\s+/g, '-');
-            const num = String(document.getElementById('ind_numero').value).padStart(3, '0');
-            
-            if (cliente && zona && num) {
-                const id = `${cliente}-${zona}-${num}`;
-                document.getElementById('ind_idPalmera').value = id;
-            }
-        }
+            // 2. NAVBAR SCROLL EFFECT
+            const navbar = document.getElementById('navbar');
+            let lastScroll = 0;
 
-        function cargarPlantillaCliente(nombreCliente) {
-            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            const tpl = plantillas.find(p => p.nombre.toLowerCase() === nombreCliente.toLowerCase());
-            
-            if (tpl) {
-                document.getElementById('ind_zona').value = tpl.zona;
-                document.getElementById('ind_frecuencia').value = tpl.frecuencia;
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
                 
-                const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
-                const delCliente = regs.filter(r => r.nombreCliente.toLowerCase() === nombreCliente.toLowerCase());
-                const maxNum = delCliente.reduce((max, r) => {
-                    const match = r.idPalmera.match(/-(\d+)$/);
-                    return match ? Math.max(max, parseInt(match[1])) : max;
-                }, 0);
+                if (currentScroll > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
                 
-                document.getElementById('ind_numero').value = maxNum + 1;
-                generarIDIndividual();
-            }
-        }
+                lastScroll = currentScroll;
+            });
 
-        async function guardarIndividual(e) {
-            e.preventDefault();
-            await guardarPalmera(false);
-        }
-
-        async function guardarYDuplicar() {
-            await guardarPalmera(true);
-        }
-
-        async function guardarPalmera(duplicar) {
-            const datos = {
-                idPalmera: document.getElementById('ind_idPalmera').value,
-                nombreCliente: document.getElementById('ind_cliente').value,
-                ubicacionZona: document.getElementById('ind_zona').value,
-                fechaTratamiento: document.getElementById('ind_fechaTrat').value,
-                frecuenciaDosis: document.getElementById('ind_frecuencia').value,
-                vigor: document.querySelector('input[name="ind_vigor"]:checked').value,
-                timestamp: new Date().toISOString(),
-                fechaProximoTratamiento: calcularProximaFecha(document.getElementById('ind_fechaTrat').value, document.getElementById('ind_frecuencia').value)
+            // 3. ANIMACIONES AL SCROLL (Intersection Observer)
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
             };
 
-            let regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
-            regs.push(datos);
-            localStorage.setItem('registrosPalmeras', JSON.stringify(regs));
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
 
-            document.getElementById('successMessage').style.display = 'block';
-            document.getElementById('successMessage').textContent = `✓ Guardado: ${datos.idPalmera}`;
-            setTimeout(() => document.getElementById('successMessage').style.display = 'none', 2000);
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
 
-            if (duplicar) {
-                const num = parseInt(document.getElementById('ind_numero').value) + 1;
-                document.getElementById('ind_numero').value = num;
-                generarIDIndividual();
-                document.getElementById('ind_foto1').value = '';
-                document.getElementById('ind_foto2').value = '';
-                document.getElementById('ind_upload1').classList.remove('has-file');
-                document.getElementById('ind_upload2').classList.remove('has-file');
-                document.getElementById('ind_numero').focus();
-            } else {
-                document.getElementById('formIndividual').reset();
-                document.getElementById('ind_fechaTrat').valueAsDate = new Date();
-            }
-        }
+            // 4. SMOOTH SCROLL PARA ANCLAS
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (!href || href === '#') return;
 
-        function calcularProximaFecha(fecha, freq) {
-            const f = new Date(fecha);
-            f.setDate(f.getDate() + parseInt(freq));
-            return f.toISOString().split('T')[0];
-        }
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const offsetTop = target.offsetTop - 80;
+                        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                    }
+                });
+            });
 
-        function procesarFoto(input, containerId) {
-            const container = document.getElementById(containerId);
-            if (input.files?.[0]) {
-                container.classList.add('has-file');
-                container.querySelector('div:last-child').textContent = '✓ ' + input.files[0].name;
-            }
-        }
+            // 5. MANEJO DEL FORMULARIO - ENVÍO A WHATSAPP CON MEJOR UX
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.textContent;
 
-        function actualizarPreviewBatch() {
-            const desde = parseInt(document.getElementById('batch_desde').value) || 1;
-            const hasta = parseInt(document.getElementById('batch_hasta').value) || 10;
-            const cantidad = Math.max(0, hasta - desde + 1);
-            
-            document.getElementById('batch_cantidad').textContent = cantidad;
-            
-            const cliente = document.getElementById('batch_cliente').value || 'CLIENTE';
-            const zona = document.getElementById('batch_zona').value || 'ZONA';
-            
-            const preview = `${cliente.toUpperCase().replace(/\s+/g, '-')}-${zona.toUpperCase().replace(/\s+/g, '-')}-${String(desde).padStart(3, '0')} al ${String(hasta).padStart(3, '0')}`;
-            document.getElementById('batch_preview').textContent = `Se generarán: ${preview} (${cantidad} palmeras)`;
-        }
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
 
-        async function iniciarCargaMasiva() {
-            const cliente = document.getElementById('batch_cliente').value;
-            const zona = document.getElementById('batch_zona').value;
-            const desde = parseInt(document.getElementById('batch_desde').value);
-            const hasta = parseInt(document.getElementById('batch_hasta').value);
-            
-            if (!cliente || !zona) {
-                alert('Complete cliente y zona');
-                return;
-            }
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
 
-            const cantidad = hasta - desde + 1;
-            if (!confirm(`¿Confirmar carga de ${cantidad} palmeras?`)) return;
-
-            const progressContainer = document.getElementById('batch_progress_container');
-            const progressBar = document.getElementById('batch_progress');
-            progressContainer.classList.remove('hidden');
-
-            const vigorBase = document.querySelector('input[name="batch_vigor"]:checked')?.value || '0';
-            let regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
-
-            for (let i = desde; i <= hasta; i++) {
-                const progreso = ((i - desde + 1) / cantidad) * 100;
-                progressBar.style.width = progreso + '%';
-                progressBar.textContent = Math.round(progreso) + '%';
-
-                let vigor = vigorBase;
-                if (document.getElementById('batch_estado').value === 'alternado') {
-                    vigor = (i % 2 === 0) ? '0' : '2';
+                if (!data.name || !data.email || !data.service || !data.message) {
+                    alert('Por favor complete todos los campos obligatorios.');
+                    return;
                 }
 
-                const datos = {
-                    idPalmera: `${cliente.toUpperCase().replace(/\s+/g, '-')}-${zona.toUpperCase().replace(/\s+/g, '-')}-${String(i).padStart(3, '0')}`,
-                    nombreCliente: cliente,
-                    ubicacionZona: zona,
-                    fechaTratamiento: new Date().toISOString().split('T')[0],
-                    frecuenciaDosis: '30',
-                    vigor: vigor,
-                    timestamp: new Date().toISOString(),
-                    fechaProximoTratamiento: calcularProximaFecha(new Date().toISOString().split('T')[0], '30')
-                };
+                const serviceSelect = document.getElementById('service');
+                const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
 
-                regs.push(datos);
-                
-                if (i % 5 === 0) await new Promise(r => setTimeout(r, 10));
-            }
+                const phone = data.phone || '-';
+                const mensaje = `Hola Palm Keeper®.
+Quiero una consulta técnica.
 
-            localStorage.setItem('registrosPalmeras', JSON.stringify(regs));
-            
-            progressBar.textContent = '✓ Completado';
-            setTimeout(() => {
-                progressContainer.classList.add('hidden');
-                alert(`✓ ${cantidad} palmeras cargadas exitosamente`);
-                showTab('registros');
-                document.querySelector('.nav-tab:nth-child(4)').click();
-            }, 500);
-        }
+Nombre: ${data.name}
+Email: ${data.email}
+Teléfono: ${phone}
+Tipo de consulta: ${serviceText}
 
-        function cargarPlantillas() {
-            let plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            
-            if (plantillas.length === 0) {
-                plantillas = [{
-                    id: Date.now(),
-                    nombre: 'Hotel Argentino',
-                    zona: 'Jardin-Principal',
-                    frecuencia: '30',
-                    cantidad: 40
-                }];
-                localStorage.setItem('plantillas', JSON.stringify(plantillas));
-            }
-        }
+Descripción:
+${data.message}`;
 
-        function mostrarPlantillas() {
-            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            const container = document.getElementById('listaPlantillas');
-            
-            container.innerHTML = plantillas.map(p => `
-                <div class="template-card" onclick="seleccionarPlantilla(${p.id})">
-                    <div class="template-actions" onclick="event.stopPropagation()">
-                        <button class="btn-icon" onclick="editarPlantilla(${p.id})" style="background: #2196f3;">✏️</button>
-                        <button class="btn-icon" onclick="eliminarPlantilla(${p.id})" style="background: #f44336;">🗑️</button>
-                    </div>
-                    <h4>${p.nombre}</h4>
-                    <div class="meta">
-                        Zona: ${p.zona} | Frecuencia: ${p.frecuencia} días | ~${p.cantidad} palmeras
-                    </div>
-                </div>
-            `).join('');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Abriendo WhatsApp…';
 
-            const select = document.getElementById('batch_plantilla');
-            select.innerHTML = '<option value="">-- Seleccionar --</option>' + 
-                plantillas.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
-        }
+                const url = `https://wa.me/59891919338?text=${encodeURIComponent(mensaje)}`;
 
-        function mostrarFormPlantilla() {
-            document.getElementById('formNuevaPlantilla').classList.remove('hidden');
-        }
+                // iOS-friendly: si el popup se bloquea, navega directo
+                const w = window.open(url, '_blank');
+                if (!w) window.location.href = url;
 
-        function cancelarPlantilla() {
-            document.getElementById('formNuevaPlantilla').classList.add('hidden');
-        }
-
-        function guardarPlantilla() {
-            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            
-            const nueva = {
-                id: Date.now(),
-                nombre: document.getElementById('tpl_nombre').value,
-                zona: document.getElementById('tpl_zona').value,
-                frecuencia: document.getElementById('tpl_frecuencia').value,
-                cantidad: document.getElementById('tpl_cantidad').value
-            };
-
-            plantillas.push(nueva);
-            localStorage.setItem('plantillas', JSON.stringify(plantillas));
-            
-            cancelarPlantilla();
-            mostrarPlantillas();
-            actualizarListaClientes();
-        }
-
-        function cargarDatosPlantilla(id) {
-            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            const p = plantillas.find(pl => pl.id == id);
-            if (!p) return;
-
-            document.getElementById('batch_cliente').value = p.nombre;
-            document.getElementById('batch_zona').value = p.zona;
-            actualizarPreviewBatch();
-        }
-
-        function actualizarListaClientes() {
-            const plantillas = JSON.parse(localStorage.getItem('plantillas') || '[]');
-            const datalist = document.getElementById('listaClientes');
-            datalist.innerHTML = plantillas.map(p => `<option value="${p.nombre}">`).join('');
-        }
-
-        function mostrarRegistros() {
-            const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
-            const container = document.getElementById('listaRegistros');
-            
-            if (regs.length === 0) {
-                container.innerHTML = '<div class="info-box">No hay registros</div>';
-                return;
-            }
-
-            const porCliente = {};
-            regs.forEach(r => {
-                if (!porCliente[r.nombreCliente]) porCliente[r.nombreCliente] = [];
-                porCliente[r.nombreCliente].push(r);
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
+                    this.reset();
+                }, 600);
             });
 
-            container.innerHTML = Object.keys(porCliente).map(cliente => {
-                const palmeras = porCliente[cliente];
-                const criticas = palmeras.filter(p => p.vigor === '3').length;
-                
-                return `
-                    <div class="section" style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong style="color: var(--color-primario); font-size: 1.1em;">${cliente}</strong>
-                                <div style="font-size: 0.85em; color: #666; margin-top: 4px;">
-                                    ${palmeras.length} palmeras registradas
-                                    ${criticas > 0 ? `| <span style="color: #d32f2f;">${criticas} críticas</span>` : ''}
-                                </div>
-                            </div>
-                            <button class="btn-secondary" style="width: auto; padding: 8px 16px;" onclick="verDetalleCliente('${cliente}')">
-                                Ver detalle
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
+            // 7. BOTÓN FLOTANTE WHATSAPP - OPACIDAD CERCA DEL FOOTER (robusto)
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            const footer = document.querySelector('.footer');
 
-        function filtrarRegistros() {
-            const term = document.getElementById('buscarRegistro').value.toLowerCase();
-        }
+            if (whatsappFloat && footer) {
+                window.addEventListener('scroll', () => {
+                    const scrollPosition = window.scrollY + window.innerHeight;
+                    const footerTop = footer.offsetTop;
+                    const distanceToFooter = footerTop - scrollPosition;
 
-        function generarMapaCalor() {
-            const regs = JSON.parse(localStorage.getItem('registrosPalmeras') || '[]');
-            const container = document.getElementById('heatmapContainer');
-            
-            if (regs.length === 0) {
-                container.innerHTML = '<div class="info-box">No hay datos</div>';
-                return;
+                    whatsappFloat.style.opacity = (distanceToFooter < 300) ? '0.35' : '1';
+                });
             }
-
-            const porZona = {};
-            regs.forEach(r => {
-                const key = `${r.nombreCliente} - ${r.ubicacionZona}`;
-                if (!porZona[key]) porZona[key] = [];
-                porZona[key].push(r);
-            });
-
-            container.innerHTML = Object.keys(porZona).map(zona => {
-                const palmeras = porZona[zona];
-                const promedio = palmeras.reduce((sum, p) => sum + parseInt(p.vigor || 0), 0) / palmeras.length;
-                
-                let clase = 'heatmap-optimo';
-                if (promedio > 2) clase = 'heatmap-critico';
-                else if (promedio > 1.5) clase = 'heatmap-malo';
-                else if (promedio > 1) clase = 'heatmap-regular';
-                else if (promedio > 0.5) clase = 'heatmap-bueno';
-
-                return `
-                    <div class="${clase}" style="padding: 15px; border-radius: 10px; text-align: center;">
-                        <div style="font-weight: bold; font-size: 0.9em;">${zona}</div>
-                        <div style="font-size: 1.5em; margin: 5px 0;">${palmeras.length}</div>
-                        <div style="font-size: 0.8em;">Prom: ${promedio.toFixed(1)}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function descargarPlantillaCSV() {
-            const csv = 'ID_Palmera,Cliente,Zona,Fecha_Tratamiento,Frecuencia_Dias,Vigor,Clorosis,Necrosis\n' +
-                       'EJEMPLO-001,Hotel Argentino,Jardin-Principal,2024-02-07,30,0,0,0';
-            
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'plantilla_carga_masiva.csv';
-            link.click();
-        }
-
-        function procesarCSV(input) {
-            alert('Procesando CSV... (función en desarrollo)');
-        }
+        });
     </script>
 </body>
 </html>
